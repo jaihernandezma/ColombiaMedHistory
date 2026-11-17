@@ -1,0 +1,73 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 5 0 R /F2 6 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 2103 >>
+stream
+0.1 0.45 0.7 rg
+BT /F1 14 Tf 50 740 Td (REPUBLICA DE COLOMBIA) Tj ET
+BT /F1 11 Tf 50 724 Td (MINISTERIO DE SALUD Y PROTECCION SOCIAL) Tj ET
+0.15 0.7 0.5 rg
+BT /F1 10 Tf 50 710 Td (RED NACIONAL ColombiaMedHistory - SISTEMA UNIFICADO) Tj ET
+0.7 0.7 0.7 RG 1 w 50 700 m 562 700 l S
+0.1 0.2 0.3 rg
+BT /F1 16 Tf 50 675 Td (REPORTE DE ESPIROMETRIA RESPIRATORIA) Tj ET
+0.95 0.97 1.0 rg 50 595 512 65 re f
+0.8 0.85 0.9 RG 0.5 w 50 595 512 65 re S
+0.2 0.25 0.3 rg
+BT /F1 9 Tf 60 645 Td (PACIENTE: MARIA FERNANDA MORALES HENAO) Tj ET
+BT /F2 9 Tf 60 630 Td (DOCUMENTO: CC 43.567.890    |    FECHA DE EMISION: 15/10/2026) Tj ET
+BT /F2 9 Tf 60 615 Td (MEDICO ESPECIALISTA: Dra. Liliana Restrepo - Neumologia Clinica) Tj ET
+BT /F2 8 Tf 60 602 Td (ESTADO EN NUBE NACIONAL: CERTIFICADO Y SINCRONIZADO) Tj ET
+0.1 0.1 0.1 rg
+0.0 0.35 0.6 rg
+BT /F1 11 Tf 50 557 Td (PRUEBA DE FUNCION PULMONAR PRE Y POST BRONCODILATADOR) Tj ET
+0.1 0.1 0.1 rg
+BT /F2 9 Tf 50 541 Td (Indicacion: Valoracion de reactividad bronquial en paciente asmatica.) Tj ET
+0.0 0.35 0.6 rg
+BT /F1 11 Tf 50 509 Td (VALORES REGISTRADOS) Tj ET
+0.1 0.1 0.1 rg
+BT /F2 9 Tf 65 493 Td (* FVC basal: 3.42 L [96% predicho]) Tj ET
+BT /F2 9 Tf 65 479 Td (* FEV1 basal: 2.78 L [88% predicho]) Tj ET
+BT /F2 9 Tf 65 465 Td (* Relacion FEV1/FVC basal: 81.2%) Tj ET
+BT /F2 9 Tf 65 451 Td (* Respuesta post-broncodilatador [400 mcg Salbutamol]:) Tj ET
+BT /F2 9 Tf 50 437 Td (  * FEV1 post: 3.12 L [Incremento del 12.2% y 340 mL]) Tj ET
+0.0 0.35 0.6 rg
+BT /F1 11 Tf 50 405 Td (CONCLUSION NEUMOLOGICA) Tj ET
+0.1 0.1 0.1 rg
+BT /F2 9 Tf 65 389 Td (* Espirometria con prueba broncodilatadora positiva, compatible con asma leve controlada.) Tj ET
+BT /F2 9 Tf 65 375 Td (* Capacidad vital forzada conservada, sin atrapamiento aereo evidente.) Tj ET
+0.7 0.7 0.7 RG 1 w 50 110 m 562 110 l S
+0.3 0.3 0.3 rg
+BT /F1 8 Tf 50 95 Td (DOCUMENTO CLINICO DIGITAL VALIDO SEGUN LEY 2015 DE 2020) Tj ET
+BT /F2 7 Tf 50 82 Td (Firma Digital Verificada: SHA-256 / Hash Oficial de Autenticidad Medica) Tj ET
+BT /F2 7 Tf 50 70 Td (Sede Clinica Autorizada - ColombiaMedHistory Cloud Platform) Tj ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+6 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 7
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000251 00000 n 
+0000002406 00000 n 
+0000002481 00000 n 
+trailer
+<< /Size 7 /Root 1 0 R >>
+startxref
+2551
+%%EOF

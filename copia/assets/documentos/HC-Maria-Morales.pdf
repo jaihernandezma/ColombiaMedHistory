@@ -1,0 +1,78 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 5 0 R /F2 6 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 2505 >>
+stream
+0.1 0.45 0.7 rg
+BT /F1 14 Tf 50 740 Td (REPUBLICA DE COLOMBIA) Tj ET
+BT /F1 11 Tf 50 724 Td (MINISTERIO DE SALUD Y PROTECCION SOCIAL) Tj ET
+0.15 0.7 0.5 rg
+BT /F1 10 Tf 50 710 Td (RED NACIONAL ColombiaMedHistory - SISTEMA UNIFICADO) Tj ET
+0.7 0.7 0.7 RG 1 w 50 700 m 562 700 l S
+0.1 0.2 0.3 rg
+BT /F1 16 Tf 50 675 Td (HISTORIA CLINICA - ENDOCRINOLOGIA) Tj ET
+0.95 0.97 1.0 rg 50 595 512 65 re f
+0.8 0.85 0.9 RG 0.5 w 50 595 512 65 re S
+0.2 0.25 0.3 rg
+BT /F1 9 Tf 60 645 Td (PACIENTE: MARIA FERNANDA MORALES HENAO) Tj ET
+BT /F2 9 Tf 60 630 Td (DOCUMENTO: CC 43.567.890    |    FECHA DE EMISION: 28/10/2026) Tj ET
+BT /F2 9 Tf 60 615 Td (MEDICO ESPECIALISTA: Dr. Jorge Alberto Munoz - Endocrinologo R.M. 55670) Tj ET
+BT /F2 8 Tf 60 602 Td (ESTADO EN NUBE NACIONAL: CERTIFICADO Y SINCRONIZADO) Tj ET
+0.1 0.1 0.1 rg
+0.0 0.35 0.6 rg
+BT /F1 11 Tf 50 557 Td (RESUMEN DE CONSULTA) Tj ET
+0.1 0.1 0.1 rg
+BT /F2 9 Tf 50 541 Td (Paciente femenina de 34 anos en seguimiento por tiroiditis autoinmune e hipotiroidismo primario.) Tj ET
+BT /F2 9 Tf 65 527 Td (* Sintomas actuales: Refiere mejoria sustancial de astenia y caida de cabello.) Tj ET
+BT /F2 9 Tf 65 513 Td (* Alergias registradas: Penicilina y derivados beta-lactamicos.) Tj ET
+0.0 0.35 0.6 rg
+BT /F1 11 Tf 50 481 Td (EXAMEN TIROIDEO) Tj ET
+0.1 0.1 0.1 rg
+BT /F2 9 Tf 65 465 Td (* Tiroides palpable grado I, indolora, sin nodulos delimitables ni adenopatias cervicales.) Tj ET
+BT /F2 9 Tf 65 451 Td (* Reflejos osteotendinosos simetricos. Ritmo cardiaco: 68 lpm regular.) Tj ET
+0.0 0.35 0.6 rg
+BT /F1 11 Tf 50 419 Td (DIAGNOSTICO Y TRATAMIENTO) Tj ET
+0.1 0.1 0.1 rg
+BT /F2 9 Tf 65 403 Td (* [E03.9] Hipotiroidismo primario compensado.) Tj ET
+BT /F2 9 Tf 65 389 Td (* [J45.0] Asma bronquial intermitente leve [Control pulmonar estable].) Tj ET
+0.0 0.35 0.6 rg
+BT /F1 11 Tf 50 357 Td (PLAN TERAPEUTICO) Tj ET
+0.1 0.1 0.1 rg
+BT /F2 9 Tf 65 341 Td (* Levotiroxina sodica 75 mcg tabletas: 1 tableta diaria en ayunas con agua 30 min antes del desayuno.) Tj ET
+BT /F2 9 Tf 65 327 Td (* Salbutamol spray 100 mcg: 2 inhalaciones solo en caso de crisis asmatica.) Tj ET
+BT /F2 9 Tf 65 313 Td (* Control de TSH y T4 Libre en 6 meses.) Tj ET
+0.7 0.7 0.7 RG 1 w 50 110 m 562 110 l S
+0.3 0.3 0.3 rg
+BT /F1 8 Tf 50 95 Td (DOCUMENTO CLINICO DIGITAL VALIDO SEGUN LEY 2015 DE 2020) Tj ET
+BT /F2 7 Tf 50 82 Td (Firma Digital Verificada: SHA-256 / Hash Oficial de Autenticidad Medica) Tj ET
+BT /F2 7 Tf 50 70 Td (Sede Clinica Autorizada - ColombiaMedHistory Cloud Platform) Tj ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+6 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 7
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000251 00000 n 
+0000002808 00000 n 
+0000002883 00000 n 
+trailer
+<< /Size 7 /Root 1 0 R >>
+startxref
+2953
+%%EOF
