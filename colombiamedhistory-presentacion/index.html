@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#05070d">
+  <meta name="description" content="ColombiaMedHistory: propuesta académica para conectar la información médica y facilitar el acceso a historiales clínicos en Colombia.">
+  <title>ColombiaMedHistory — salud conectada</title>
+  <link rel="icon" href="./assets/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+  <script src="./script.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav wrap" aria-label="Navegación principal">
+      <a class="brand" href="#inicio" aria-label="ColombiaMedHistory, inicio">
+        <img src="./assets/logo.svg" alt="" width="36" height="36">
+        <span>ColombiaMed<span class="brand-accent">History</span></span>
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Abrir menú">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="nav-links" id="nav-links">
+        <a href="#proyecto">Proyecto</a>
+        <a href="#funciona">Cómo funciona</a>
+        <a href="#funcionalidades">Funcionalidades</a>
+        <a href="#equipo">Equipo</a>
+        <a class="button button-small button-outline" href="https://jaihernandezma.github.io/ColombiaMedHistory/index.html" target="_blank" rel="noopener noreferrer">Ir a la plataforma <span aria-hidden="true">↗</span></a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero wrap" id="inicio">
+      <div class="hero-copy">
+        <span class="eyebrow"><i class="pulse-dot"></i> Prototipo académico</span>
+        <h1>ColombiaMed<span class="gradient-text">History</span></h1>
+        <p class="hero-lead">Conectando la información médica, transformando el acceso a la salud.</p>
+        <p class="hero-description">Una propuesta de historial clínico unificado para que la información relevante acompañe a cada paciente, sin importar dónde recibe atención.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#proyecto">Explorar el proyecto <span aria-hidden="true">↓</span></a>
+          <a class="button button-quiet" href="https://jaihernandezma.github.io/ColombiaMedHistory/index.html" target="_blank" rel="noopener noreferrer">Acceder a la plataforma <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="hero-note"><span class="note-icon">✳</span><span>Una visión digital para una atención más conectada en Colombia.</span></div>
+      </div>
+
+      <div class="clinical-wrap" aria-label="Vista previa clínica interactiva de demostración">
+        <div class="clinical-card">
+          <div class="clinical-top"><div class="window-dots"><b></b><b></b><b></b></div><span class="demo-label"><i></i> ENTORNO DE DEMO</span><span class="lock-icon" aria-label="Vista protegida">♧</span></div>
+          <div class="patient-head">
+            <div class="avatar">DM</div>
+            <div><span class="micro-label">PACIENTE DE EJEMPLO</span><h2>Daniela Martínez</h2><p>DEMO-001 <span class="separator">·</span> 34 años <span class="separator">·</span> Bogotá</p></div>
+            <span class="patient-status">Activo</span>
+          </div>
+          <div class="clinical-tabs" role="tablist" aria-label="Información clínica de ejemplo">
+            <button class="clinical-tab active" id="tab-summary" role="tab" aria-selected="true" aria-controls="panel-summary" data-tab="summary">Resumen</button>
+            <button class="clinical-tab" id="tab-diagnoses" role="tab" aria-selected="false" aria-controls="panel-diagnoses" data-tab="diagnoses" tabindex="-1">Diagnósticos</button>
+            <button class="clinical-tab" id="tab-treatments" role="tab" aria-selected="false" aria-controls="panel-treatments" data-tab="treatments" tabindex="-1">Tratamientos</button>
+          </div>
+          <div class="clinical-content" id="panel-summary" role="tabpanel" aria-labelledby="tab-summary">
+            <div class="clinical-grid">
+              <div class="clinical-stat"><span>Grupo sanguíneo</span><strong>O+</strong><small>Dato de ejemplo</small></div>
+              <div class="clinical-stat"><span>Alergias registradas</span><strong class="stat-ok">Ninguna</strong><small>Dato de ejemplo</small></div>
+            </div>
+            <div class="record-title"><span>Actividad reciente</span><span class="record-period">HISTORIAL FICTICIO</span></div>
+            <div class="record-row"><span class="record-icon cyan">＋</span><span><b>Consulta general</b><small>Centro de atención · Bogotá</small></span><time>12 JUN</time></div>
+            <div class="record-row"><span class="record-icon violet">⌁</span><span><b>Perfil lipídico</b><small>Resultado disponible</small></span><time>03 MAY</time></div>
+          </div>
+          <div class="clinical-content" id="panel-diagnoses" role="tabpanel" aria-labelledby="tab-diagnoses" hidden>
+            <div class="record-title"><span>Diagnósticos registrados</span><span class="record-period">DEMO</span></div>
+            <div class="diagnosis-card"><span class="diagnosis-mark">01</span><div><b>Rinitis alérgica estacional</b><small>Diagnóstico de demostración · Consulta general</small></div><span class="diagnosis-tag">En seguimiento</span></div>
+            <div class="diagnosis-card"><span class="diagnosis-mark">02</span><div><b>Miopía leve</b><small>Dato ficticio para ilustrar el historial</small></div><span class="diagnosis-tag muted-tag">Estable</span></div>
+            <p class="demo-disclaimer">Todos los registros de esta vista son ficticios.</p>
+          </div>
+          <div class="clinical-content" id="panel-treatments" role="tabpanel" aria-labelledby="tab-treatments" hidden>
+            <div class="record-title"><span>Plan de cuidado</span><span class="record-period">DEMO</span></div>
+            <div class="treatment-card"><div class="treatment-top"><span class="record-icon cyan">✚</span><span class="treatment-state">ACTIVO · EJEMPLO</span></div><b>Control preventivo anual</b><p>Seguimiento general y actualización de antecedentes.</p><div class="treatment-progress"><i></i></div><small>Próxima revisión · Fecha ilustrativa</small></div>
+            <div class="treatment-card compact-treatment"><span class="record-icon violet">✳</span><span><b>Hábitos saludables</b><small>Recomendación ficticia de demostración</small></span></div>
+            <p class="demo-disclaimer">Contenido ilustrativo, no constituye indicación médica.</p>
+          </div>
+          <div class="clinical-footer"><span><i></i> Datos locales de demostración</span><span>CMH / 001</span></div>
+        </div>
+      </div>
+      <div class="hero-orbit orbit-one"></div><div class="hero-orbit orbit-two"></div>
+    </section>
+
+    <section class="trust-strip wrap" aria-label="Principios del proyecto"><span>INFORMACIÓN</span><i></i><span>CONTINUIDAD</span><i></i><span>ACCESO CON PROPÓSITO</span><i></i><span>COLOMBIA</span></section>
+
+    <section class="section wrap" id="proyecto">
+      <div class="section-heading"><span class="section-kicker">01 / EL PROYECTO</span><h2>La historia clínica,<br><span class="muted-heading">en el centro del cuidado.</span></h2><p>ColombiaMedHistory imagina una red donde los datos médicos esenciales puedan consultarse con claridad cuando y donde se necesitan.</p></div>
+      <div class="project-grid">
+        <article class="info-card problem-card"><span class="card-index">EL RETO</span><div class="card-symbol">⌁</div><h3>Información dispersa</h3><p>La trayectoria de una persona puede quedar repartida entre instituciones, sedes y documentos. Esa fragmentación dificulta reconstruir su contexto clínico.</p><div class="card-line"></div><span class="card-foot">UNA EXPERIENCIA MÁS CONTINUA</span></article>
+        <article class="info-card proposal-card"><span class="card-index">LA PROPUESTA</span><div class="card-symbol">◈</div><h3>Una mirada unificada</h3><p>Un punto de consulta para organizar antecedentes, diagnósticos y resultados, con una experiencia diseñada alrededor de las necesidades de pacientes y profesionales.</p><div class="card-line"></div><span class="card-foot">DISEÑO PARA CONECTAR</span></article>
+        <article class="info-card purpose-card"><span class="card-index">EL PROPÓSITO</span><div class="card-symbol">✳</div><h3>Mejor contexto, mejor atención</h3><p>Facilitar el acceso a información pertinente puede apoyar decisiones informadas y reducir repeticiones en la atención.</p><div class="card-line"></div><span class="card-foot">TECNOLOGÍA CON SENTIDO HUMANO</span></article>
+      </div>
+      <p class="academic-note"><span>ⓘ</span> Propuesta académica en etapa de prototipo. La integración nacional descrita es una visión del proyecto.</p>
+    </section>
+
+    <section class="section steps-section" id="funciona"><div class="wrap">
+      <div class="section-heading centered"><span class="section-kicker">02 / EL RECORRIDO</span><h2>De los datos a la continuidad.</h2><p>Cuatro pasos ilustran el flujo propuesto para mantener la información clínica organizada y disponible.</p></div>
+      <div class="steps-grid">
+        <article class="step-card"><div class="step-top"><span>01</span><span class="step-icon">◎</span></div><h3>Identificación</h3><p>El paciente se registra mediante su documento en el sistema.</p></article>
+        <article class="step-card"><div class="step-top"><span>02</span><span class="step-icon">↥</span></div><h3>Registro clínico</h3><p>Se incorporan valoraciones, diagnósticos y resultados.</p></article>
+        <article class="step-card"><div class="step-top"><span>03</span><span class="step-icon">⌕</span></div><h3>Consulta autorizada</h3><p>Un profesional accede al contexto relevante para la atención.</p></article>
+        <article class="step-card"><div class="step-top"><span>04</span><span class="step-icon">⤴</span></div><h3>Continuidad</h3><p>La información acompaña la trayectoria del paciente en el tiempo.</p></article>
+      </div>
+      <div class="flow-line" aria-hidden="true"><i></i></div>
+    </div></section>
+
+    <section class="section wrap" id="funcionalidades">
+      <div class="section-heading features-heading"><div><span class="section-kicker">03 / CAPACIDADES</span><h2>Funcionalidades del prototipo.</h2></div><p>Explora lo que está disponible en la aplicación y lo que hace parte de la visión a futuro.</p></div>
+      <div class="filter-bar" role="group" aria-label="Filtrar funcionalidades por estado"><span>FILTRAR</span><button class="filter-button active" data-filter="all" aria-pressed="true">Todas <b>06</b></button><button class="filter-button" data-filter="available" aria-pressed="false">En prototipo <b>03</b></button><button class="filter-button" data-filter="planned" aria-pressed="false">Propuesta <b>03</b></button></div>
+      <div class="feature-grid" id="feature-grid">
+        <article class="feature-card" data-status="available"><span class="feature-number">F / 01</span><span class="feature-icon">⌕</span><h3>Consulta de pacientes</h3><p>Búsqueda de registros de demostración por documento o nombre.</p><span class="status status-live"><i></i> En prototipo</span></article>
+        <article class="feature-card" data-status="available"><span class="feature-number">F / 02</span><span class="feature-icon">▤</span><h3>Resumen del historial</h3><p>Visualización de datos personales, antecedentes y actividad clínica ficticia.</p><span class="status status-live"><i></i> En prototipo</span></article>
+        <article class="feature-card" data-status="available"><span class="feature-number">F / 03</span><span class="feature-icon">＋</span><h3>Registro de paciente</h3><p>Formulario de ejemplo para incorporar un registro en la experiencia.</p><span class="status status-live"><i></i> En prototipo</span></article>
+        <article class="feature-card" data-status="planned"><span class="feature-number">F / 04</span><span class="feature-icon">⌘</span><h3>Red de instituciones</h3><p>Conexión propuesta entre centros de atención y prestadores.</p><span class="status status-plan"><i></i> Propuesta</span></article>
+        <article class="feature-card" data-status="planned"><span class="feature-number">F / 05</span><span class="feature-icon">♧</span><h3>Acceso por roles</h3><p>Gestión de permisos para pacientes y profesionales autorizados.</p><span class="status status-plan"><i></i> Propuesta</span></article>
+        <article class="feature-card" data-status="planned"><span class="feature-number">F / 06</span><span class="feature-icon">⇧</span><h3>Documentos clínicos</h3><p>Consulta organizada de informes y resultados como parte de una evolución.</p><span class="status status-plan"><i></i> Propuesta</span></article>
+      </div>
+      <p class="filter-empty" hidden>No hay funcionalidades en esta categoría.</p>
+    </section>
+
+    <section class="tech-section"><div class="wrap tech-layout"><div><span class="section-kicker">04 / TECNOLOGÍA</span><h2>Ligero por diseño.<br><span class="muted-heading">Abierto para aprender.</span></h2><p>La aplicación de demostración está construida con tecnologías web fundamentales y datos estáticos locales.</p></div><div class="tech-stack"><div class="tech-item"><span class="tech-mark html-mark">5</span><span><b>HTML</b><small>Estructura semántica</small></span><span class="tech-arrow">↗</span></div><div class="tech-item"><span class="tech-mark css-mark">✳</span><span><b>CSS</b><small>Diseño adaptable</small></span><span class="tech-arrow">↗</span></div><div class="tech-item"><span class="tech-mark js-mark">JS</span><span><b>JavaScript</b><small>Interacciones del prototipo</small></span><span class="tech-arrow">↗</span></div><div class="tech-item"><span class="tech-mark data-mark">{ }</span><span><b>Datos estáticos</b><small>Registros de ejemplo locales</small></span><span class="tech-arrow">↗</span></div></div></div></section>
+
+    <section class="section wrap" id="equipo">
+      <div class="section-heading"><span class="section-kicker">05 / QUIÉNES SOMOS</span><h2>Construido en equipo.</h2><p>Una iniciativa estudiantil en el marco del módulo de Competencias Digitales (TICs).</p></div>
+      <div class="team-grid">
+        <article class="team-card"><div class="team-avatar">BZ</div><div><span class="team-role">INTEGRANTE DEL PROYECTO</span><h3>Blandón Zapata</h3><p>ColombiaMedHistory <span class="example-tag">Ficha de ejemplo</span></p></div><span class="team-spark">✳</span></article>
+        <article class="team-card"><div class="team-avatar alt-avatar">HA</div><div><span class="team-role">INTEGRANTE DEL PROYECTO</span><h3>Hincapié Amaya</h3><p>ColombiaMedHistory <span class="example-tag">Ficha de ejemplo</span></p></div><span class="team-spark">✳</span></article>
+        <article class="team-card"><div class="team-avatar third-avatar">HM</div><div><span class="team-role">INTEGRANTE DEL PROYECTO</span><h3>Hernández Martínez</h3><p>ColombiaMedHistory <span class="example-tag">Ficha de ejemplo</span></p></div><span class="team-spark">✳</span></article>
+      </div>
+    </section>
+
+    <section class="section timeline-section"><div class="wrap">
+      <div class="section-heading centered"><span class="section-kicker">06 / EVOLUCIÓN</span><h2>Un proyecto en construcción.</h2><p>Hitos orientativos del recorrido académico. Las fechas y etapas se presentan como ejemplo.</p></div>
+      <div class="timeline"><article class="timeline-item"><span class="timeline-dot"></span><span class="timeline-date">ETAPA 01 · EJEMPLO</span><h3>Explorar el reto</h3><p>Identificar la fragmentación de la información como problema de diseño.</p></article><article class="timeline-item"><span class="timeline-dot"></span><span class="timeline-date">ETAPA 02 · EJEMPLO</span><h3>Diseñar la experiencia</h3><p>Proponer una interfaz clara para consulta y registro de información.</p></article><article class="timeline-item"><span class="timeline-dot"></span><span class="timeline-date">ETAPA 03 · ACTUAL</span><h3>Prototipo navegable</h3><p>Presentar una demostración funcional con registros ficticios.</p></article><article class="timeline-item future-item"><span class="timeline-dot"></span><span class="timeline-date">ETAPA 04 · PROPUESTA</span><h3>Ampliar la visión</h3><p>Explorar posibilidades de interoperabilidad y crecimiento del concepto.</p></article></div>
+    </div></section>
+
+    <section class="access-section wrap" id="acceso"><div class="access-card"><div class="access-glow"></div><div class="access-copy"><span class="section-kicker">07 / PRUÉBALO</span><h2>Explora el prototipo<br>en acción.</h2><p>Visita la aplicación y descubre una demostración de consulta y registro con pacientes ficticios.</p><a class="button button-primary" href="https://jaihernandezma.github.io/ColombiaMedHistory/index.html" target="_blank" rel="noopener noreferrer">Abrir plataforma <span aria-hidden="true">↗</span></a></div><div class="access-preview"><div class="preview-head"><img src="./assets/logo.svg" alt="" width="30" height="30"><span>ColombiaMedHistory</span><span class="preview-live"><i></i> DEMO</span></div><div class="preview-search"><span>⌕</span> Buscar paciente de ejemplo...<kbd>↵</kbd></div><div class="preview-person"><span class="avatar small-avatar">DM</span><span><b>Daniela Martínez</b><small>DEMO-001 · Bogotá</small></span><span class="preview-arrow">↗</span></div><div class="preview-record"><i></i><span>Historial clínico de demostración</span></div></div></div></section>
+
+    <section class="contact-section wrap" id="contacto"><div><span class="section-kicker">08 / CONVERSEMOS</span><h2>¿Tienes preguntas sobre el proyecto?</h2></div><div class="contact-action"><p>Escríbenos al correo de contacto publicado en la aplicación.</p><a href="mailto:demo@colombiamedhistory.edu.co">demo@colombiamedhistory.edu.co <span>↗</span></a></div></section>
+  </main>
+  <footer class="footer"><div class="wrap footer-main"><a class="brand" href="#inicio"><img src="./assets/logo.svg" alt="" width="32" height="32"><span>ColombiaMed<span class="brand-accent">History</span></span></a><p>Prototipo académico de nube unificada<br>para historiales médicos en Colombia.</p><div class="footer-nav"><a href="#proyecto">Proyecto</a><a href="#funcionalidades">Funcionalidades</a><a href="#contacto">Contacto</a><a href="https://jaihernandezma.github.io/ColombiaMedHistory/index.html" target="_blank" rel="noopener noreferrer">Plataforma ↗</a></div></div><div class="wrap footer-bottom"><span>© 2026 ColombiaMedHistory · Proyecto de Competencias Digitales</span><span class="footer-caption">DISEÑADO PARA CONECTAR <i></i> COLOMBIA</span></div></footer>
+</body>
+</html>

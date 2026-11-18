@@ -8,7 +8,7 @@
     <!-- Fuentes e iconos -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <link rel="stylesheet" href="css/styles.css">
@@ -33,7 +33,7 @@
                 <li><a href="#acerca" class="nav-link"><i class="fa-solid fa-circle-info"></i> Acerca de</a></li>
             </ul>
 
-            <button class="navbar-toggle" id="navbarToggle">
+            <button class="navbar-toggle" id="navbarToggle" type="button" aria-label="Abrir menú de navegación" aria-controls="navbarLinks">
                 <i class="fa-solid fa-bars"></i>
             </button>
         </div>
@@ -207,7 +207,7 @@
                 <div>
                     <h3 id="visorTituloDoc">Informe de Estudio Clínico</h3>
                     <p id="visorFechaDoc">Fecha</p>
-                    <p id="visorMedicoDoc" style="color: #0284c7; font-weight: 500;">Médico</p>
+                    <p id="visorMedicoDoc" style="color: var(--cyan); font-weight: 500;">Médico</p>
                     <span class="sello-seguridad">
                         <i class="fa-solid fa-shield-halved"></i> Documento Verificado en la Nube Nacional
                     </span>
@@ -216,12 +216,12 @@
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
-            <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 18px; margin: 15px 0;">
-                <h4 style="font-size: 0.9rem; color: #475569; margin-bottom: 6px;">Interpretación y Hallazgos Clínicos:</h4>
-                <p id="visorResultadoDoc" style="font-size: 0.95rem; color: #1e293b; line-height: 1.6;"></p>
+            <div style="background-color: var(--card); border: 1px solid var(--line); border-radius: 13px; padding: 18px; margin: 15px 0;">
+                <h4 style="font-size: 0.9rem; color: var(--ink); margin-bottom: 6px;">Interpretación y Hallazgos Clínicos:</h4>
+                <p id="visorResultadoDoc" style="font-size: 0.95rem; color: var(--muted); line-height: 1.6;"></p>
             </div>
             <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; flex-wrap: wrap; gap: 10px;">
-                <span style="font-size: 0.75rem; color: #94a3b8;">ColombiaMedHistory Cloud - Red Nacional de Salud</span>
+                <span style="font-size: 0.75rem; color: var(--muted);">ColombiaMedHistory Cloud - Red Nacional de Salud</span>
                 <a id="visorBtnDescarga" href="#" download class="btn-pdf">
                     <i class="fa-solid fa-download"></i> Descargar Documento Oficial (PDF)
                 </a>

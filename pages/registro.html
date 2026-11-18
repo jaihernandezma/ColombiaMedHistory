@@ -7,7 +7,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <link rel="stylesheet" href="../css/styles.css">
@@ -32,7 +32,7 @@
                 <li><a href="../index.html#acerca" class="nav-link"><i class="fa-solid fa-circle-info"></i> Acerca de</a></li>
             </ul>
 
-            <button class="navbar-toggle" id="navbarToggle">
+            <button class="navbar-toggle" id="navbarToggle" type="button" aria-label="Abrir menú de navegación" aria-controls="navbarLinks">
                 <i class="fa-solid fa-bars"></i>
             </button>
         </div>
@@ -45,7 +45,7 @@
             <div style="text-align: center; margin-bottom: 30px;">
                 <span class="hero-badge">Nuevo ingreso a la red</span>
                 <h2>Registrar Nuevo Paciente</h2>
-                <p style="color: #64748b; font-size: 0.95rem; margin-top: 6px;">
+                <p style="color: var(--muted); font-size: 0.95rem; margin-top: 6px;">
                     Formulario para ingresar datos básicos de un ciudadano al prototipo de la nube médica.
                 </p>
             </div>
@@ -54,7 +54,7 @@
                 <form id="formRegistro">
                     <div class="form-group">
                         <label for="tipoDocumento">
-                            <i class="fa-solid fa-id-card" style="color: #0284c7;"></i> Tipo de documento
+                            <i class="fa-solid fa-id-card" style="color: var(--blue);"></i> Tipo de documento
                         </label>
                         <select id="tipoDocumento" required>
                             <option value="">Selecciona una opción</option>
@@ -68,35 +68,35 @@
 
                     <div class="form-group">
                         <label for="numeroDocumento">
-                            <i class="fa-solid fa-hashtag" style="color: #10b981;"></i> Número de documento
+                            <i class="fa-solid fa-hashtag" style="color: var(--cyan);"></i> Número de documento
                         </label>
                         <input type="text" id="numeroDocumento" placeholder="Ej: DEMO-CC-0021" required>
                     </div>
 
                     <div class="form-group">
                         <label for="nombres">
-                            <i class="fa-solid fa-user" style="color: #0ea5e9;"></i> Nombres completos
+                            <i class="fa-solid fa-user" style="color: var(--blue);"></i> Nombres completos
                         </label>
                         <input type="text" id="nombres" placeholder="Ej: Camilo Andrés" required>
                     </div>
 
                     <div class="form-group">
                         <label for="apellidos">
-                            <i class="fa-solid fa-user" style="color: #0ea5e9;"></i> Apellidos
+                            <i class="fa-solid fa-user" style="color: var(--blue);"></i> Apellidos
                         </label>
                         <input type="text" id="apellidos" placeholder="Ej: Salazar Pérez" required>
                     </div>
 
                     <div class="form-group">
                         <label for="fechaNacimiento">
-                            <i class="fa-solid fa-calendar" style="color: #f97316;"></i> Fecha de nacimiento
+                            <i class="fa-solid fa-calendar" style="color: var(--cyan);"></i> Fecha de nacimiento
                         </label>
                         <input type="date" id="fechaNacimiento" required>
                     </div>
 
                     <div class="form-group">
                         <label for="tipoSangre">
-                            <i class="fa-solid fa-droplet" style="color: #dc2626;"></i> Tipo de sangre
+                            <i class="fa-solid fa-droplet" style="color: #ff7b93;"></i> Tipo de sangre
                         </label>
                         <select id="tipoSangre">
                             <option value="O+">O+</option>
@@ -112,14 +112,14 @@
 
                     <div class="form-group">
                         <label for="correo">
-                            <i class="fa-solid fa-envelope" style="color: #10b981;"></i> Correo electrónico
+                            <i class="fa-solid fa-envelope" style="color: var(--cyan);"></i> Correo electrónico
                         </label>
                         <input type="email" id="correo" placeholder="correo@ejemplo.com">
                     </div>
 
                     <div class="form-group">
                         <label for="telefono">
-                            <i class="fa-solid fa-phone" style="color: #0284c7;"></i> Teléfono de contacto
+                            <i class="fa-solid fa-phone" style="color: var(--blue);"></i> Teléfono de contacto
                         </label>
                         <input type="tel" id="telefono" placeholder="3001234567">
                     </div>
