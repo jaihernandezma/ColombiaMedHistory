@@ -7,7 +7,7 @@
   const persisted = window.CMHSession?.read() || {};
   let patients = [], temporaryPatients = persisted.temporaryPatients || [], temporaryProfessionals = persisted.temporaryProfessionals || [], session = null;
   const personalFiles = [], clinicalFiles = [], requests = [], audit = [];
-  let approvedProfessionals = [];
+  let approvedProfessionals = [], dataLoaded = false, queryState = 'idle', querySequence = 0;
   const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
   const dateLabel = value => new Intl.DateTimeFormat('es-CO',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'}).format(new Date(`${value}T00:00:00Z`));
   const fullName = patient => `${patient.nombres} ${patient.apellidos}`;
@@ -22,11 +22,13 @@
       if (!Array.isArray(data.pacientes)) throw new Error('Formato no válido');
       patients = data.pacientes;
       approvedProfessionals = Array.isArray(data.profesionalesAutorizados) ? data.profesionalesAutorizados : [];
+      dataLoaded = true;
       renderSamples();
       restoreSession(persisted.authSession);
     } catch (error) {
       console.error('No fue posible cargar los datos de demostración:', error);
-      showMessage('No se pudieron cargar los datos. Ejecuta la aplicación desde un servidor HTTP local.');
+      setQueryState('error');
+      showMessage('No se pudieron cargar los datos de prueba. Ejecuta la aplicación desde un servidor HTTP local.');
       form.querySelector('button[type="submit"]').disabled = true;
     }
   }
@@ -64,7 +66,7 @@
     $$('[data-clinical-file]',container).forEach(button=>button.addEventListener('click',()=>{const file=clinicalFiles.find(item=>item.eventId===button.dataset.clinicalFile);if(file){const link=document.createElement('a');link.href=file.url;link.download=file.name;link.click();}}));
   }
   function renderPatient(patient,{clinical=true}={}) {
-    if(!clinical){result.innerHTML=`<div class="patient-head"><div class="avatar">${escapeHTML(patient.nombres.slice(0,1))}</div><div><span class="step-label">CONSULTA RÁPIDA · DATOS GENERALES</span><h2>${escapeHTML(fullName(patient))}</h2><div class="patient-meta">${escapeHTML(patient.tipoDocumento)} · ${escapeHTML(patient.numeroDocumento)}</div></div><span class="demo-tag">FICTICIO</span></div><div class="summary-grid"><div class="summary-item"><span>Ciudad de demostración</span><b>${escapeHTML(patient.ciudad||'No indicada')}</b></div><div class="summary-item"><span>Perfil</span><b>Paciente ficticio</b></div></div><p class="privacy-warning">La consulta rápida no muestra ni descarga información clínica.</p>`;return;}
+    if(!clinical){result.innerHTML=`<div class="result-toolbar"><div><span class="step-label">CONSULTA RÁPIDA · DATOS GENERALES</span><h2>Resultado de consulta</h2></div><button type="button" class="button secondary" id="new-consult">Nueva consulta</button></div><div class="quick-result-head"><div class="avatar">${escapeHTML(patient.nombres.slice(0,1))}</div><div><h3>${escapeHTML(fullName(patient))}</h3><div class="patient-meta">${escapeHTML(patient.tipoDocumento)} · ${escapeHTML(patient.numeroDocumento)}</div></div><span class="demo-tag">DEMOSTRACIÓN</span></div><div class="quick-result-grid"><article class="quick-info-card"><span class="step-label">INFORMACIÓN GENERAL</span><h3>Datos básicos</h3><dl><div><dt>Nombre</dt><dd>${escapeHTML(fullName(patient))}</dd></div><div><dt>Ciudad de demostración</dt><dd>${escapeHTML(patient.ciudad||'No indicada')}</dd></div><div><dt>Perfil</dt><dd>Paciente ficticio</dd></div></dl></article><article class="quick-info-card"><span class="step-label">IDENTIFICACIÓN DEL REGISTRO</span><h3>Datos de prueba</h3><dl><div><dt>Tipo de documento</dt><dd>${escapeHTML(patient.tipoDocumento)}</dd></div><div><dt>Identificador sintético</dt><dd>${escapeHTML(patient.numeroDocumento)}</dd></div><div><dt>Identificador interno</dt><dd>${escapeHTML(patient.id)}</dd></div></dl></article></div><p class="privacy-warning">La consulta pública no muestra diagnósticos, tratamientos, alergias, historial ni documentos clínicos.</p><div class="clinical-access-note"><span>¿Necesitas consultar tu información clínica?</span><a class="button primary" href="auth/login.html">Iniciar sesión</a></div>`;$('#new-consult').addEventListener('click',resetQuickConsult);return;}
     const events=patient.events||[], diagnoses=patient.diagnosticos||[], antecedentes=patient.antecedentes||[], allergies=patient.alergias||[], meds=patient.medicamentos||[];
     const counts={Consultas:events.filter(e=>e.category==='Consulta').length,Diagnósticos:diagnoses.length,Resultados:events.filter(e=>e.category==='Resultado').length};
     const canRecord=session?.kind==='professional'&&session.professional.patientIds.includes(patient.id);
@@ -77,10 +79,14 @@
   }
   function renderSamples(filter='') {
     const list=$('#sample-list'); if(!list)return;
+    const documentType=$('#doc-type'), selectedType=documentType.value;
+    const documentTypes=[...new Set(allPatients().map(patient=>patient.tipoDocumento).filter(Boolean))];
+    documentType.innerHTML=documentTypes.map(type=>`<option value="${escapeHTML(type)}">Identificación sintética ${escapeHTML(type)}</option>`).join('');
+    documentType.value=documentTypes.includes(selectedType)?selectedType:(documentTypes[0]||'DEMO');
     const term=filter.trim().toLocaleLowerCase('es');
     const matching=allPatients().filter(p=>`${fullName(p)} ${p.numeroDocumento}`.toLocaleLowerCase('es').includes(term));
-    list.innerHTML=matching.length?matching.map(p=>`<li><div class="sample-entry"><button type="button" data-sample="${escapeHTML(p.numeroDocumento)}"><b>${escapeHTML(fullName(p))}</b><span>${escapeHTML(p.tipoDocumento)} ${escapeHTML(p.numeroDocumento)}</span></button><button type="button" data-copy="${escapeHTML(p.numeroDocumento)}" aria-label="Copiar documento de ${escapeHTML(fullName(p))}">Copiar ID</button></div></li>`).join(''):'<li class="help">No hay coincidencias.</li>';
-    $$('[data-sample]',list).forEach(button=>button.addEventListener('click',()=>{input.value=button.dataset.sample;$('#sample-menu').hidden=true;$('#sample-toggle').setAttribute('aria-expanded','false');input.focus();}));
+    list.innerHTML=matching.length?matching.map(p=>`<li><div class="sample-entry"><button type="button" data-sample="${escapeHTML(p.numeroDocumento)}" data-type="${escapeHTML(p.tipoDocumento)}"><b>${escapeHTML(fullName(p))}</b><span>${escapeHTML(p.tipoDocumento)} ${escapeHTML(p.numeroDocumento)}</span></button><button type="button" data-copy="${escapeHTML(p.numeroDocumento)}" aria-label="Copiar documento de ${escapeHTML(fullName(p))}">Copiar ID</button></div></li>`).join(''):'<li class="help">No hay coincidencias.</li>';
+    $$('[data-sample]',list).forEach(button=>button.addEventListener('click',()=>{input.value=button.dataset.sample;documentType.value=button.dataset.type;$('#sample-menu').hidden=true;$('#sample-toggle').setAttribute('aria-expanded','false');input.focus();}));
     $$('[data-copy]',list).forEach(copy=>{const perform=async e=>{e.stopPropagation();try{await navigator.clipboard.writeText(copy.dataset.copy);$('#copy-message').textContent='Documento copiado.';}catch{$('#copy-message').textContent=`ID: ${copy.dataset.copy}`;}};copy.addEventListener('click',perform);copy.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();perform(e);}});});
   }
   function showAccount(tab='resumen') {
@@ -132,13 +138,34 @@
     if(tab==='actividad') content.innerHTML=`<h3>Actividad en memoria</h3>${audit.length?`<ul class="request-list">${audit.map(item=>`<li>${escapeHTML(item.time)} · ${escapeHTML(item.professional)} consultó ${escapeHTML(item.patient)}</li>`).join('')}</ul>`:'<p>Aún no hay consultas registradas.</p>'}`;
     $$('[data-clinical]',content).forEach(button=>button.addEventListener('click',()=>{const patient=allowed.find(p=>p.id===button.dataset.clinical);if(!patient)return;audit.unshift({time:new Date().toLocaleString('es-CO'),professional:prof.name,patient:fullName(patient)});result.hidden=false;$('#consulta').hidden=false;renderPatient(patient);result.scrollIntoView({behavior:'smooth',block:'start'});showMessage('Consulta autorizada de demostración registrada en auditoría de sesión.',false);}));
   }
+  function setQueryState(nextState) {
+    queryState = nextState;
+    const workspace = $('#consulta'), searchPanel = $('.search-panel', workspace);
+    workspace.dataset.queryState = nextState;
+    workspace.classList.toggle('is-success', nextState === 'success');
+    searchPanel.inert = nextState === 'success';
+    searchPanel.setAttribute('aria-hidden', String(nextState === 'success'));
+  }
+  function resetQuickConsult() {
+    querySequence++;
+    form.reset();
+    $('#sample-filter').value = '';
+    $('#sample-menu').hidden = true;
+    $('#sample-toggle').setAttribute('aria-expanded', 'false');
+    $('#copy-message').textContent = '';
+    message.textContent = '';
+    message.style.color = '';
+    result.innerHTML = '<div class="empty-state"><span class="empty-icon">⌕</span><h2>Busca un perfil de demostración</h2><p>La consulta rápida muestra solo datos generales ficticios. Para ingresar a un panel de demostración usa los accesos de la barra superior.</p></div>';
+    setQueryState('idle');
+    input.focus();
+  }
   function logout(){session=null;window.CMHSession?.update({authSession:null});accountPanel.hidden=true;$('#consulta').hidden=false;result.innerHTML='<div class="empty-state"><span class="empty-icon">⌕</span><h2>Sesión cerrada</h2><p>Los perfiles temporales de esta pestaña siguen disponibles hasta recargar o reiniciar.</p><a class="button primary" href="auth/login.html">Iniciar sesión</a></div>';}
   function openRegistration(kind){registrationPanel.hidden=false;accountPanel.hidden=true;$('#consulta').hidden=true;const isPatient=kind==='patient';registrationPanel.innerHTML=`<div class="account-heading"><div><span class="step-label">REGISTRO TEMPORAL · SOLO ESTA SESIÓN</span><h2>${isPatient?'Registrar paciente ficticio':'Registrar profesional de salud'}</h2></div><button type="button" class="button secondary" id="cancel-registration">Volver</button></div><form id="registration-form" class="registration-form">${isPatient?`<label>Nombres<input name="nombres" required maxlength="60"></label><label>Apellidos<input name="apellidos" required maxlength="60"></label><label>Tipo de documento<select name="tipoDocumento"><option value="DEMO">DEMO</option></select></label><label>Documento sintético<input name="numeroDocumento" required pattern="DEMO-CC-[0-9]{4}" placeholder="DEMO-CC-0001" title="Formato DEMO-CC-0001"></label><label>Fecha de nacimiento<input name="fechaNacimiento" type="date" required max="${new Date().toISOString().slice(0,10)}"></label><label>Información general opcional<input name="ciudad" maxlength="80" placeholder="Ciudad ficticia"></label>`:`<label>Nombre completo<input name="nombre" required maxlength="100"></label><label>Tipo y número de identificación ficticia<input name="identificacion" required placeholder="DEMO-CC-9001"></label><label>Profesión<input name="profesion" required maxlength="80"></label><label>Especialidad<input name="especialidad" maxlength="80"></label><label>Institución ficticia<input name="institucion" required maxlength="100"></label><label>Correo de demostración<input name="correo" type="email" required placeholder="profesional@example.demo"></label><label>Número profesional ficticio<input name="numeroProfesional" placeholder="DEMO-RM-001"></label>`}<p class="form-message" id="registration-message" role="status"></p><button class="button primary" type="submit">${isPatient?'Crear paciente temporal':'Registrar profesional'}</button><p class="help">Los datos se guardan solo en memoria JavaScript y desaparecen al recargar.</p></form>`;
     $('#cancel-registration').addEventListener('click',()=>{registrationPanel.hidden=true;$('#consulta').hidden=false;});
     $('#registration-form').addEventListener('submit',e=>{e.preventDefault();const data=Object.fromEntries(new FormData(e.currentTarget));const status=$('#registration-message');if(isPatient){if(allPatients().some(p=>p.numeroDocumento===data.numeroDocumento)){status.textContent='Ese identificador ya existe en esta sesión.';return;}const age=Math.max(0,new Date().getFullYear()-new Date(data.fechaNacimiento).getFullYear());temporaryPatients.push({id:`P-TEMP-${Date.now()}`,tipoDocumento:'DEMO',numeroDocumento:data.numeroDocumento,nombres:data.nombres.trim(),apellidos:data.apellidos.trim(),fechaNacimiento:data.fechaNacimiento,edad:age,ciudad:data.ciudad||'No indicada',tipoSangre:'No registrado',alergias:[],antecedentes:[],diagnosticos:[],medicamentos:[],events:[]});renderSamples();status.textContent='Paciente creado en memoria. Ya aparece en los pacientes de prueba.';e.currentTarget.reset();}else{temporaryProfessionals.push({...data,state:'PENDIENTE DE VERIFICACIÓN — DEMOSTRACIÓN'});status.textContent='Perfil registrado: PENDIENTE DE VERIFICACIÓN — DEMOSTRACIÓN. No recibe permisos clínicos.';e.currentTarget.reset();}});
   }
-  form.addEventListener('submit',event=>{event.preventDefault();const raw=input.value.trim();const patient=allPatients().find(item=>item.numeroDocumento.toLowerCase()===raw.toLowerCase());if(!patient){result.innerHTML='<div class="empty-state"><h2>Sin resultados</h2><p>No existe un perfil con ese identificador de prueba.</p></div>';showMessage('No encontramos coincidencias. Usa el menú de pacientes ficticios.');return;}renderPatient(patient,{clinical:false});showMessage('Coincidencia ficticia. La consulta rápida no muestra datos médicos.',false);});
-  $('#fill-demo').addEventListener('click',()=>{input.value=patients[0]?.numeroDocumento||'900000000001';input.focus();});
+  form.addEventListener('submit',event=>{event.preventDefault();const requestId=++querySequence;if(!dataLoaded){setQueryState('error');showMessage('Los perfiles de prueba todavía se están cargando. Intenta de nuevo en un momento.');return;}const raw=input.value.trim();if(!raw){setQueryState('error');showMessage('Escribe o selecciona un identificador ficticio.');input.focus();return;}setQueryState('loading');const patient=allPatients().find(item=>item.tipoDocumento===document.querySelector('#doc-type').value&&item.numeroDocumento.toLowerCase()===raw.toLowerCase());if(requestId!==querySequence)return;if(!patient){setQueryState('error');showMessage('Paciente no encontrado. Verifica el identificador o elige un paciente de prueba.');input.focus();return;}renderPatient(patient,{clinical:false});setQueryState('success');});
+  $('#fill-demo').addEventListener('click',()=>{input.value=patients[0]?.numeroDocumento||'900000000001';if(patients[0])$('#doc-type').value=patients[0].tipoDocumento;input.focus();});
   $('#sample-toggle').addEventListener('click',()=>{const menu=$('#sample-menu');menu.hidden=!menu.hidden;$('#sample-toggle').setAttribute('aria-expanded',String(!menu.hidden));if(!menu.hidden){renderSamples($('#sample-filter').value);$('#sample-filter').focus();}});
   $('#sample-filter').addEventListener('input',e=>renderSamples(e.target.value));
   document.addEventListener('click',event=>{const picker=$('.sample-picker');if(!picker.contains(event.target)){$('#sample-menu').hidden=true;$('#sample-toggle').setAttribute('aria-expanded','false');}});
