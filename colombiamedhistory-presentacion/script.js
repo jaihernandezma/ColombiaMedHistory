@@ -3,27 +3,6 @@
   document.querySelectorAll('[data-link="demo"]').forEach((link) => {
     if (config.demoUrl) link.href = config.demoUrl;
   });
-  const essayLink = document.getElementById('essay-final-link');
-  if (essayLink && config.essayPdfUrl) {
-    essayLink.href = config.essayPdfUrl;
-    essayLink.hidden = false;
-  }
-  (config.team || []).forEach((member, index) => {
-    const link = document.querySelector(`[data-team="${index}"]`);
-    if (link && member.portfolioUrl) {
-      link.href = member.portfolioUrl;
-      link.target = '_blank';
-      link.rel = 'noopener noreferrer';
-      link.textContent = 'Ver portafolio ↗';
-    }
-  });
-  const video = document.getElementById('video-embed');
-  if (video && config.youtubeUrl) {
-    const match = config.youtubeUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([\w-]{11})/);
-    if (match) {
-      video.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${match[1]}" title="Video pitch de ColombiaMedHistory" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
-    }
-  }
 
   const menuButton = document.querySelector('.menu-toggle');
   const navLinks = document.querySelector('.nav-links');
@@ -32,13 +11,13 @@
     const isOpen = menuButton.getAttribute('aria-expanded') === 'true';
     menuButton.setAttribute('aria-expanded', String(!isOpen));
     menuButton.setAttribute('aria-label', isOpen ? 'Abrir menú' : 'Cerrar menú');
-    navLinks.classList.toggle('open', !isOpen);
+    navLinks?.classList.toggle('open', !isOpen);
   });
 
   navLinks?.addEventListener('click', (event) => {
     if (event.target.closest('a')) {
-      menuButton.setAttribute('aria-expanded', 'false');
-      menuButton.setAttribute('aria-label', 'Abrir menú');
+      menuButton?.setAttribute('aria-expanded', 'false');
+      menuButton?.setAttribute('aria-label', 'Abrir menú');
       navLinks.classList.remove('open');
     }
   });
@@ -48,11 +27,12 @@
     light.className = 'academic-light';
     light.setAttribute('aria-hidden', 'true');
     document.body.append(light);
-    const targets = document.querySelectorAll('.info-card,.step-card,.feature-card,.clinical-card,.legal-grid article,.deliverable-card');
+    const targets = document.querySelectorAll('.info-card,.step-card,.feature-card,.clinical-card,.legal-grid article');
     targets.forEach((element) => element.classList.add('academic-glow'));
     let frame = 0, x = 0, y = 0;
     document.addEventListener('pointermove', (event) => {
-      x = event.clientX; y = event.clientY;
+      x = event.clientX;
+      y = event.clientY;
       const target = event.target.closest('.academic-glow');
       if (target) {
         const rect = target.getBoundingClientRect();
@@ -68,5 +48,4 @@
     }, { passive: true });
     document.addEventListener('pointerleave', () => light.classList.remove('visible'));
   }
-
 })();
