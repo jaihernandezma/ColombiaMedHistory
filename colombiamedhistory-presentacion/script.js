@@ -43,4 +43,30 @@
     }
   });
 
+  if (matchMedia('(hover: hover) and (pointer: fine)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const light = document.createElement('div');
+    light.className = 'academic-light';
+    light.setAttribute('aria-hidden', 'true');
+    document.body.append(light);
+    const targets = document.querySelectorAll('.info-card,.step-card,.feature-card,.clinical-card,.legal-grid article,.deliverable-card');
+    targets.forEach((element) => element.classList.add('academic-glow'));
+    let frame = 0, x = 0, y = 0;
+    document.addEventListener('pointermove', (event) => {
+      x = event.clientX; y = event.clientY;
+      const target = event.target.closest('.academic-glow');
+      if (target) {
+        const rect = target.getBoundingClientRect();
+        target.style.setProperty('--local-x', `${x - rect.left}px`);
+        target.style.setProperty('--local-y', `${y - rect.top}px`);
+      }
+      light.classList.add('visible');
+      if (!frame) frame = requestAnimationFrame(() => {
+        document.documentElement.style.setProperty('--pointer-x', `${x}px`);
+        document.documentElement.style.setProperty('--pointer-y', `${y}px`);
+        frame = 0;
+      });
+    }, { passive: true });
+    document.addEventListener('pointerleave', () => light.classList.remove('visible'));
+  }
+
 })();
