@@ -9,7 +9,7 @@
 - `colombiamedhistory-presentacion/`: presentación académica, enlaces, ensayo, pitch y explicación de alcance.
 - GitHub Pages entrega los archivos estáticos públicamente. El JSON y el código JavaScript no son secretos ni una base de datos privada.
 
-No hay backend, envío de datos, almacenamiento remoto, autenticación robusta ni comunicación con entidades prestadoras. Los cambios temporales desaparecen al recargar.
+No hay backend, envío de datos, almacenamiento remoto, autenticación robusta ni comunicación con entidades prestadoras. Los registros de usuario y la sesión de demostración se guardan únicamente en `sessionStorage` para conservarlos al navegar entre `index.html`, `auth/login.html` y `auth/registro.html` en la misma pestaña. `auth/session.js` usa Navigation Timing para borrar esos datos al detectar una recarga. El tipo de navegación no se expone uniformemente en todos los navegadores, de modo que el botón **Reiniciar demostración** permite borrarlos manualmente si la detección automática falla. Cerrar la pestaña también termina el almacenamiento de sesión del navegador.
 
 ## Perfiles y matriz de permisos
 
@@ -39,7 +39,7 @@ Los únicos profesionales habilitados para la simulación se declaran en `data/p
 
 ## Archivos y datos temporales
 
-- Los pacientes registrados en el formulario, perfiles profesionales nuevos, solicitudes, auditoría y preferencias de compartición viven solo en memoria JavaScript.
+- Los pacientes registrados, perfiles profesionales nuevos y sesión de demostración se conservan durante la navegación entre las páginas de acceso mediante `sessionStorage`; se reinician al recargar cuando el navegador permite identificar la navegación como `reload`, o con **Reiniciar demostración**. Archivos, solicitudes, auditoría y preferencias viven en memoria de la página y no se comparten entre documentos.
 - Los archivos personales aceptados son PDF, JPG, PNG o TXT de hasta 5 MB cada uno. Se conservan como objetos `File` y URL `Blob` locales; no se cargan a servidor, nube ni repositorio. Al eliminar, se revoca la URL temporal. Al recargar se pierden.
 - PDF e imágenes pueden abrirse para previsualización; TXT se descarga y no se inserta como HTML.
 - Los ejemplos clínicos oficiales son registros ficticios del historial y no son archivos personales borrables. Descargas TXT se generan en el navegador.

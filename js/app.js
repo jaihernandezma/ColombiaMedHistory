@@ -3,8 +3,9 @@
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
   const form = $('#search-form'), input = $('#doc-number'), result = $('#result'), message = $('#search-message');
-  const accountPanel = $('#account-panel'), registrationPanel = $('#registration-panel'), loginDialog = $('#login-dialog');
-  let patients = [], temporaryPatients = [], temporaryProfessionals = [], currentAccess = 'quick', session = null;
+  const accountPanel = $('#account-panel');
+  const persisted = window.CMHSession?.read() || {};
+  let patients = [], temporaryPatients = persisted.temporaryPatients || [], temporaryProfessionals = persisted.temporaryProfessionals || [], session = null;
   const personalFiles = [], clinicalFiles = [], requests = [], audit = [];
   let approvedProfessionals = [];
   const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
@@ -22,11 +23,22 @@
       patients = data.pacientes;
       approvedProfessionals = Array.isArray(data.profesionalesAutorizados) ? data.profesionalesAutorizados : [];
       renderSamples();
+      restoreSession(persisted.authSession);
     } catch (error) {
       console.error('No fue posible cargar los datos de demostración:', error);
       showMessage('No se pudieron cargar los datos. Ejecuta la aplicación desde un servidor HTTP local.');
       form.querySelector('button[type="submit"]').disabled = true;
     }
+  }
+  function restoreSession(savedSession) {
+    if (!savedSession) return;
+    if (savedSession.kind === 'citizen' && allPatients().some(patient => patient.id === savedSession.patientId)) session = savedSession;
+    if (savedSession.kind === 'professional') {
+      const professional = approvedProfessionals.find(item => item.id === savedSession.professionalId);
+      if (professional) session = {kind:'professional',professional};
+    }
+    if (session) showAccount();
+    else window.CMHSession?.update({authSession:null});
   }
   function downloadText(filename, content) {
     const url = URL.createObjectURL(new Blob([content],{type:'text/plain;charset=utf-8'}));
@@ -71,16 +83,9 @@
     $$('[data-sample]',list).forEach(button=>button.addEventListener('click',()=>{input.value=button.dataset.sample;$('#sample-menu').hidden=true;$('#sample-toggle').setAttribute('aria-expanded','false');input.focus();}));
     $$('[data-copy]',list).forEach(copy=>{const perform=async e=>{e.stopPropagation();try{await navigator.clipboard.writeText(copy.dataset.copy);$('#copy-message').textContent='Documento copiado.';}catch{$('#copy-message').textContent=`ID: ${copy.dataset.copy}`;}};copy.addEventListener('click',perform);copy.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();perform(e);}});});
   }
-  function openLogin(kind) {
-    $('#login-title').textContent=kind==='citizen'?'Ingreso como ciudadano':'Ingreso profesional de salud';
-    $('#login-description').textContent=kind==='citizen'?'Elige una cuenta ficticia; la sesión solo existe en esta página.':'Solo los perfiles profesionales explícitamente autorizados pueden consultar los pacientes asignados.';
-    const availableCitizens=allPatients().map(patient=>({id:patient.id,label:`${fullName(patient)} · ${patient.numeroDocumento}`}));
-    $('#account-select').innerHTML=kind==='citizen'?availableCitizens.map(c=>`<option value="${escapeHTML(c.id)}">${escapeHTML(c.label)}</option>`).join(''):approvedProfessionals.map(p=>`<option value="${escapeHTML(p.id)}">${escapeHTML(p.name)} · ${escapeHTML(p.institution)}</option>`).join('');
-    $('#login-submit').dataset.kind=kind;loginDialog.showModal();
-  }
   function showAccount(tab='resumen') {
     if(!session)return;
-    accountPanel.hidden=false;$('#consulta').hidden=true;registrationPanel.hidden=true;
+    accountPanel.hidden=false;$('#consulta').hidden=true;
     if(session.kind==='citizen') renderCitizen(tab); else renderProfessional(tab);
   }
   function renderCitizen(tab) {
@@ -127,24 +132,19 @@
     if(tab==='actividad') content.innerHTML=`<h3>Actividad en memoria</h3>${audit.length?`<ul class="request-list">${audit.map(item=>`<li>${escapeHTML(item.time)} · ${escapeHTML(item.professional)} consultó ${escapeHTML(item.patient)}</li>`).join('')}</ul>`:'<p>Aún no hay consultas registradas.</p>'}`;
     $$('[data-clinical]',content).forEach(button=>button.addEventListener('click',()=>{const patient=allowed.find(p=>p.id===button.dataset.clinical);if(!patient)return;audit.unshift({time:new Date().toLocaleString('es-CO'),professional:prof.name,patient:fullName(patient)});result.hidden=false;$('#consulta').hidden=false;renderPatient(patient);result.scrollIntoView({behavior:'smooth',block:'start'});showMessage('Consulta autorizada de demostración registrada en auditoría de sesión.',false);}));
   }
-  function logout(){session=null;accountPanel.hidden=true;$('#consulta').hidden=false;result.innerHTML='<div class="empty-state"><span class="empty-icon">⌕</span><h2>Sesión cerrada</h2><p>Selecciona nuevamente un nivel de acceso.</p></div>';currentAccess='quick';setAccess('quick');}
-  function setAccess(access){currentAccess=access;$$('[data-access]').forEach(button=>{button.classList.toggle('active',button.dataset.access===access);button.setAttribute('aria-pressed',String(button.dataset.access===access));});$('#role-help').textContent=access==='quick'?'La consulta rápida solo muestra nombre, documento y ciudad ficticios. No revela datos clínicos.':access==='citizen'?'Inicia sesión con una cuenta ficticia para ver únicamente su historial y gestionar datos temporales.':'Acceso exclusivo a profesionales previamente autorizados y pacientes asignados en esta simulación.';if(access!=='quick')openLogin(access);}
+  function logout(){session=null;window.CMHSession?.update({authSession:null});accountPanel.hidden=true;$('#consulta').hidden=false;result.innerHTML='<div class="empty-state"><span class="empty-icon">⌕</span><h2>Sesión cerrada</h2><p>Los perfiles temporales de esta pestaña siguen disponibles hasta recargar o reiniciar.</p><a class="button primary" href="auth/login.html">Iniciar sesión</a></div>';}
   function openRegistration(kind){registrationPanel.hidden=false;accountPanel.hidden=true;$('#consulta').hidden=true;const isPatient=kind==='patient';registrationPanel.innerHTML=`<div class="account-heading"><div><span class="step-label">REGISTRO TEMPORAL · SOLO ESTA SESIÓN</span><h2>${isPatient?'Registrar paciente ficticio':'Registrar profesional de salud'}</h2></div><button type="button" class="button secondary" id="cancel-registration">Volver</button></div><form id="registration-form" class="registration-form">${isPatient?`<label>Nombres<input name="nombres" required maxlength="60"></label><label>Apellidos<input name="apellidos" required maxlength="60"></label><label>Tipo de documento<select name="tipoDocumento"><option value="DEMO">DEMO</option></select></label><label>Documento sintético<input name="numeroDocumento" required pattern="DEMO-CC-[0-9]{4}" placeholder="DEMO-CC-0001" title="Formato DEMO-CC-0001"></label><label>Fecha de nacimiento<input name="fechaNacimiento" type="date" required max="${new Date().toISOString().slice(0,10)}"></label><label>Información general opcional<input name="ciudad" maxlength="80" placeholder="Ciudad ficticia"></label>`:`<label>Nombre completo<input name="nombre" required maxlength="100"></label><label>Tipo y número de identificación ficticia<input name="identificacion" required placeholder="DEMO-CC-9001"></label><label>Profesión<input name="profesion" required maxlength="80"></label><label>Especialidad<input name="especialidad" maxlength="80"></label><label>Institución ficticia<input name="institucion" required maxlength="100"></label><label>Correo de demostración<input name="correo" type="email" required placeholder="profesional@example.demo"></label><label>Número profesional ficticio<input name="numeroProfesional" placeholder="DEMO-RM-001"></label>`}<p class="form-message" id="registration-message" role="status"></p><button class="button primary" type="submit">${isPatient?'Crear paciente temporal':'Registrar profesional'}</button><p class="help">Los datos se guardan solo en memoria JavaScript y desaparecen al recargar.</p></form>`;
     $('#cancel-registration').addEventListener('click',()=>{registrationPanel.hidden=true;$('#consulta').hidden=false;});
     $('#registration-form').addEventListener('submit',e=>{e.preventDefault();const data=Object.fromEntries(new FormData(e.currentTarget));const status=$('#registration-message');if(isPatient){if(allPatients().some(p=>p.numeroDocumento===data.numeroDocumento)){status.textContent='Ese identificador ya existe en esta sesión.';return;}const age=Math.max(0,new Date().getFullYear()-new Date(data.fechaNacimiento).getFullYear());temporaryPatients.push({id:`P-TEMP-${Date.now()}`,tipoDocumento:'DEMO',numeroDocumento:data.numeroDocumento,nombres:data.nombres.trim(),apellidos:data.apellidos.trim(),fechaNacimiento:data.fechaNacimiento,edad:age,ciudad:data.ciudad||'No indicada',tipoSangre:'No registrado',alergias:[],antecedentes:[],diagnosticos:[],medicamentos:[],events:[]});renderSamples();status.textContent='Paciente creado en memoria. Ya aparece en los pacientes de prueba.';e.currentTarget.reset();}else{temporaryProfessionals.push({...data,state:'PENDIENTE DE VERIFICACIÓN — DEMOSTRACIÓN'});status.textContent='Perfil registrado: PENDIENTE DE VERIFICACIÓN — DEMOSTRACIÓN. No recibe permisos clínicos.';e.currentTarget.reset();}});
   }
-  form.addEventListener('submit',event=>{event.preventDefault();const raw=input.value.trim();const patient=allPatients().find(item=>item.numeroDocumento.toLowerCase()===raw.toLowerCase());if(!patient){result.innerHTML='<div class="empty-state"><h2>Sin resultados</h2><p>No existe un perfil con ese identificador de prueba.</p></div>';showMessage('No encontramos coincidencias. Usa el menú de pacientes ficticios.');return;}if(currentAccess==='citizen'||currentAccess==='professional'){showMessage('Para acceder a información clínica, inicia sesión en la cuenta demostrativa.',true);return;}renderPatient(patient,{clinical:false});showMessage('Coincidencia ficticia. La consulta rápida no muestra datos médicos.',false);});
-  $$('[data-access]').forEach(button=>button.addEventListener('click',()=>setAccess(button.dataset.access)));
-  $('#login-submit').addEventListener('click',()=>{const kind=$('#login-submit').dataset.kind, selected=$('#account-select').value;loginDialog.close();if(kind==='citizen')session={kind,patientId:selected};else session={kind,professional:approvedProfessionals.find(prof=>prof.id===selected)};showAccount();showMessage('Sesión de demostración iniciada. No es autenticación segura.',false);});
-  loginDialog.addEventListener('close',()=>{if(!session){currentAccess='quick';$$('[data-access]').forEach(button=>{button.classList.toggle('active',button.dataset.access==='quick');button.setAttribute('aria-pressed',String(button.dataset.access==='quick'));});$('#role-help').textContent='La consulta rápida solo muestra nombre, documento y ciudad ficticios. No revela datos clínicos.';}});
+  form.addEventListener('submit',event=>{event.preventDefault();const raw=input.value.trim();const patient=allPatients().find(item=>item.numeroDocumento.toLowerCase()===raw.toLowerCase());if(!patient){result.innerHTML='<div class="empty-state"><h2>Sin resultados</h2><p>No existe un perfil con ese identificador de prueba.</p></div>';showMessage('No encontramos coincidencias. Usa el menú de pacientes ficticios.');return;}renderPatient(patient,{clinical:false});showMessage('Coincidencia ficticia. La consulta rápida no muestra datos médicos.',false);});
   $('#fill-demo').addEventListener('click',()=>{input.value=patients[0]?.numeroDocumento||'900000000001';input.focus();});
   $('#sample-toggle').addEventListener('click',()=>{const menu=$('#sample-menu');menu.hidden=!menu.hidden;$('#sample-toggle').setAttribute('aria-expanded',String(!menu.hidden));if(!menu.hidden){renderSamples($('#sample-filter').value);$('#sample-filter').focus();}});
   $('#sample-filter').addEventListener('input',e=>renderSamples(e.target.value));
   document.addEventListener('click',event=>{const picker=$('.sample-picker');if(!picker.contains(event.target)){$('#sample-menu').hidden=true;$('#sample-toggle').setAttribute('aria-expanded','false');}});
   document.addEventListener('keydown',event=>{if(event.key==='Escape'){$('#sample-menu').hidden=true;$('#sample-toggle').setAttribute('aria-expanded','false');}});
-  $$('[data-open-form]').forEach(button=>button.addEventListener('click',()=>openRegistration(button.dataset.openForm)));
-  window.addEventListener('beforeunload',event=>{if(temporaryPatients.length||temporaryProfessionals.length||personalFiles.length){event.preventDefault();event.returnValue='Los registros y archivos temporales de demostración se perderán.';}});
+  $('#reset-demo-main')?.addEventListener('click',()=>{if(window.confirm('¿Borrar perfiles temporales y cerrar la sesión de demostración?')){window.CMHSession?.reset();location.href='index.html';}});
   // Una sola escucha delegada y actualizaciones agrupadas por frame; no se activa en tacto.
-  if(matchMedia('(hover: hover) and (pointer: fine)').matches&&!matchMedia('(prefers-reduced-motion: reduce)').matches){let frame=0,x=0,y=0,target=null;document.addEventListener('pointermove',event=>{x=event.clientX;y=event.clientY;target=event.target.closest('.panel,.how-grid article,.account-panel,.registration-panel');if(target){const rect=target.getBoundingClientRect();target.style.setProperty('--local-x',`${x-rect.left}px`);target.style.setProperty('--local-y',`${y-rect.top}px`);}if(!frame)frame=requestAnimationFrame(()=>{document.documentElement.style.setProperty('--pointer-x',`${x}px`);document.documentElement.style.setProperty('--pointer-y',`${y}px`);frame=0;});},{passive:true});}
+  if(matchMedia('(hover: hover) and (pointer: fine)').matches&&!matchMedia('(prefers-reduced-motion: reduce)').matches){let frame=0,x=0,y=0,target=null;document.addEventListener('pointermove',event=>{x=event.clientX;y=event.clientY;target=event.target.closest('.panel,.how-grid article,.account-panel');if(target){const rect=target.getBoundingClientRect();target.style.setProperty('--local-x',`${x-rect.left}px`);target.style.setProperty('--local-y',`${y-rect.top}px`);}if(!frame)frame=requestAnimationFrame(()=>{document.documentElement.style.setProperty('--pointer-x',`${x}px`);document.documentElement.style.setProperty('--pointer-y',`${y}px`);frame=0;});},{passive:true});}
   loadPatients();
 })();

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07111f">
+  <meta name="description" content="Registro temporal de perfiles ficticios ColombiaMedHistory.">
+  <title>Registro | ColombiaMedHistory</title>
+  <link rel="stylesheet" href="auth.css">
+  <script src="session.js" defer></script>
+  <script src="auth.js" defer></script>
+</head>
+<body data-page="register">
+  <header class="auth-topbar">
+    <a class="brand" href="../index.html"><span class="brand-mark" aria-hidden="true">✚</span><span>ColombiaMed<strong>History</strong></span></a>
+    <a class="button quiet" href="../index.html">← Volver al inicio</a>
+  </header>
+  <main class="auth-shell">
+    <section class="auth-card register-card" aria-labelledby="page-title">
+      <span class="eyebrow">PERFILES TEMPORALES</span>
+      <h1 id="page-title">Crear perfil de demostración</h1>
+      <p class="muted">¿Qué tipo de cuenta deseas registrar?</p>
+      <div class="role-select" role="group" aria-label="Tipo de perfil a registrar">
+        <button type="button" class="role-option selected" data-register-role="citizen" aria-pressed="true">Ciudadano</button>
+        <button type="button" class="role-option" data-register-role="professional" aria-pressed="false">Profesional de salud</button>
+      </div>
+      <div id="registration-form-container"></div>
+      <div id="registration-confirmation" class="confirmation" role="status" aria-live="polite" hidden></div>
+      <div class="auth-links"><a href="login.html">¿Ya tienes cuenta? <strong>Inicia sesión</strong></a></div>
+      <aside class="demo-notice"><b>Solo demostración</b><p>Los perfiles se conservan en <code>sessionStorage</code> para navegar dentro de esta pestaña; se borran al recargar. No se transmiten ni almacenan en un servidor.</p></aside>
+      <button type="button" class="text-button reset-demo">Reiniciar demostración</button>
+    </section>
+  </main>
+  <footer class="auth-footer"><a href="../colombiamedhistory-presentacion/index.html">Proyecto académico</a><span>ColombiaMedHistory · Prototipo estático</span></footer>
+</body>
+</html>

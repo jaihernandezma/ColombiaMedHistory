@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07111f">
+  <meta name="description" content="Acceso de demostración de ColombiaMedHistory.">
+  <title>Iniciar sesión | ColombiaMedHistory</title>
+  <link rel="stylesheet" href="auth.css">
+  <script src="session.js" defer></script>
+  <script src="auth.js" defer></script>
+</head>
+<body data-page="login">
+  <header class="auth-topbar">
+    <a class="brand" href="../index.html"><span class="brand-mark" aria-hidden="true">✚</span><span>ColombiaMed<strong>History</strong></span></a>
+    <a class="button quiet" href="../index.html">← Volver al inicio</a>
+  </header>
+  <main class="auth-shell">
+    <section class="auth-card" aria-labelledby="page-title">
+      <span class="eyebrow">ACCESO DE DEMOSTRACIÓN</span>
+      <h1 id="page-title">Iniciar sesión</h1>
+      <p class="muted">Selecciona un perfil ficticio para recorrer el prototipo. No se solicitan contraseñas.</p>
+      <div class="role-select" role="group" aria-label="Tipo de cuenta">
+        <button type="button" class="role-option selected" data-login-role="citizen" aria-pressed="true">Ciudadano</button>
+        <button type="button" class="role-option" data-login-role="professional" aria-pressed="false">Profesional de salud</button>
+      </div>
+      <form id="login-form">
+        <label for="demo-account">Cuenta de demostración</label>
+        <select id="demo-account" required><option value="">Cargando cuentas ficticias…</option></select>
+        <p id="account-help" class="help"></p>
+        <p id="login-message" class="message" role="status" aria-live="polite"></p>
+        <button id="login-submit" class="button primary full" type="submit">Ingresar a la demostración</button>
+      </form>
+      <div class="auth-links"><a href="registro.html">¿No tienes cuenta? <strong>Regístrate</strong></a></div>
+      <aside class="demo-notice"><b>Entorno ficticio</b><p>Esto no es autenticación segura ni un servicio clínico. No ingreses datos personales reales. Las sesiones y registros de esta pestaña son temporales.</p></aside>
+      <button type="button" class="text-button reset-demo">Reiniciar demostración</button>
+    </section>
+  </main>
+  <footer class="auth-footer"><a href="../colombiamedhistory-presentacion/index.html">Proyecto académico</a><span>ColombiaMedHistory · Prototipo estático</span></footer>
+</body>
+</html>

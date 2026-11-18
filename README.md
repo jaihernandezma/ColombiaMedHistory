@@ -5,6 +5,7 @@ Entrega académica de un prototipo web estático para explorar un historial clí
 ## Componentes de la entrega
 
 - **Aplicación clínica:** `index.html` — consulta rápida limitada, sesiones de ciudadano/profesional simuladas, perfiles asignados, registro temporal, historial, documentos y solicitudes de privacidad.
+- **Acceso y registro:** `auth/login.html` y `auth/registro.html` — accesos separados; `auth/session.js` coordina registros/sesiones temporales entre documentos de una pestaña.
 - **Centro académico:** `colombiamedhistory-presentacion/index.html` — problema, seis flujos funcionales, alcance, referencias, ensayo, pitch, evaluación, equipo y enlaces.
 - **Datos de prueba:** `data/pacientes.json` — 20 perfiles clínicos completamente ficticios y dos profesionales de prueba con asignaciones explícitas.
 - **Privacidad:** `CAMBIOS_PRIVACIDAD.md` — arquitectura, matriz de permisos, Habeas Data, documentos y limitaciones.
@@ -15,7 +16,7 @@ Entrega académica de un prototipo web estático para explorar un historial clí
 
 ## Alcance y limitaciones
 
-HTML, CSS y JavaScript nativos, sin backend, servidor Node, base de datos, claves API ni dependencia de pago. Los registros se descargan desde JSON con `fetch`, por lo que debe abrirse desde un servidor HTTP o HTTPS; abrir `index.html` con `file://` no carga JSON de forma fiable. Las cuentas, roles, asignaciones y solicitudes son simulaciones frontend, no autenticación o autorización seguras. Los archivos agregados por el usuario y los formularios temporales viven solo en memoria local durante esa sesión, no se suben a servidor. No ingresar información real ni usar la aplicación para atención, diagnóstico o decisiones de salud.
+HTML, CSS y JavaScript nativos, sin backend, servidor Node, base de datos, claves API ni dependencia de pago. Los registros se descargan desde JSON con `fetch`, por lo que debe abrirse desde un servidor HTTP o HTTPS; abrir `index.html` con `file://` no carga JSON de forma fiable. Las cuentas, roles, asignaciones y solicitudes son simulaciones frontend, no autenticación o autorización seguras. Registro y sesión usan `sessionStorage` para navegar entre las páginas en la misma pestaña; `auth/session.js` intenta reiniciarlos al detectar recarga y hay un botón **Reiniciar demostración** como control manual. No se usa `localStorage` ni se envían datos a un servidor. No ingresar información real ni usar la aplicación para atención, diagnóstico o decisiones de salud.
 
 Los archivos de muestra se generan como TXT en el navegador para no publicar antiguos PDFs que aparentaban ser historias clínicas oficiales, contenían identificadores plausibles y afirmaban validez legal no comprobada.
 
@@ -39,6 +40,8 @@ Abrir `http://localhost:8000/` para la aplicación y `http://localhost:8000/colo
 6. Crear un paciente y un profesional temporal; comprobar que el profesional queda pendiente y no adquiere permisos.
 7. Recargar y comprobar que lo temporal desaparece pero los 20 perfiles JSON permanecen.
 8. Reducir ancho, navegar con teclado y verificar foco, menú, diálogos y enlaces académicos.
+
+Las páginas de acceso están en `auth/login.html` y `auth/registro.html`. Ver también `CAMBIOS_PRIVACIDAD.md` para detalles de `sessionStorage` y sus límites entre navegadores.
 
 ## Publicar en GitHub Pages
 
