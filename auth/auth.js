@@ -77,7 +77,7 @@
       const updated = [...temporaryPatients(), patient];
       if (!save({temporaryPatients:updated, authSession:null, confirmation:{kind:'citizen',patientId:patient.id}})) { message.textContent = 'El navegador no permitió guardar temporalmente. Habilita sessionStorage para continuar.'; return; }
       showConfirmation(`<h2>Perfil ciudadano creado</h2><p>${escapeHTML(patient.nombres)} ${escapeHTML(patient.apellidos)} · ${escapeHTML(patient.numeroDocumento)}</p><p>Se conservará al navegar dentro de esta pestaña. Su historial comienza vacío y es ficticio.</p><div class="confirmation-actions"><a class="button quiet" href="login.html">Ir a iniciar sesión</a><button class="button primary" type="button" data-enter-citizen="${escapeHTML(patient.id)}">Continuar al panel de demostración</button></div>`);
-      $('[data-enter-citizen]').addEventListener('click',()=>{save({authSession:{kind:'citizen',patientId:patient.id}});location.href='../index.html';});
+       $('[data-enter-citizen]').addEventListener('click',()=>{save({authSession:{kind:'citizen',patientId:patient.id}});location.href='../panel/ciudadano.html';});
       form.reset();
     } else {
       const id = values.identificacion.trim().toUpperCase();
@@ -109,7 +109,9 @@
       if(!professional){message.textContent='Los perfiles pendientes no pueden consultar historiales. Selecciona un profesional autorizado de prueba.';return;}
       if(!save({authSession:{kind:'professional',professionalId:professional.id}})){message.textContent='No fue posible conservar la sesión en esta pestaña.';return;}
     }
-    location.href='../index.html';
+      message.textContent='Acceso de demostración confirmado. Abriendo tu panel…';
+      const submit=$('#login-submit'); submit.disabled=true; submit.setAttribute('aria-busy','true');
+     setTimeout(()=>{location.href=loginRole==='citizen'?'../panel/ciudadano.html':'../panel/profesional.html';},220);
   });
   $$('[data-register-role]').forEach(button=>button.addEventListener('click',()=>{registerRole=button.dataset.registerRole;$$('[data-register-role]').forEach(item=>{const active=item===button;item.classList.toggle('selected',active);item.setAttribute('aria-pressed',String(active));});$('#registration-confirmation').hidden=true;$('#registration-form-container').hidden=false;renderRegistration();}));
   $$('.reset-demo').forEach(button=>button.addEventListener('click',resetDemo));
@@ -129,6 +131,9 @@
   if(document.body.dataset.page==='login'){
     $$('[data-login-role]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.loginRole==='citizen')));
     if(state().confirmation?.kind==='professional')$('#login-message').textContent='Tu registro profesional está pendiente de verificación y no permite acceso clínico.';
+    const reason=new URLSearchParams(location.search).get('reason');
+    if(reason==='session')$('#login-message').textContent='Inicia sesión con una cuenta de demostración para abrir el panel correspondiente.';
+    if(reason==='logout')$('#login-message').textContent='Sesión de demostración cerrada.';
   }
   loadData();
 })();

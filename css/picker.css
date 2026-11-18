@@ -1,0 +1,3 @@
+.sample-menu.sample-menu-floating{position:fixed;z-index:1000;top:auto;left:auto;right:auto;max-height:min(75vh,520px);overflow:hidden;}
+.sample-menu-floating ul{max-height:min(42vh,290px);overflow-y:auto;overscroll-behavior:contain;}
+@media(prefers-reduced-motion:reduce){.sample-menu,.sample-menu *{scroll-behavior:auto!important;transition:none!important;}}

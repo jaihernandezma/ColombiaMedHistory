@@ -1,12 +1,8 @@
 (() => {
   'use strict';
   const KEY = 'cmh-demo-state-v1';
-  const NAVIGATION = performance.getEntriesByType?.('navigation')?.[0]?.type;
-  // sessionStorage vive entre documentos de la misma pestaña. Una recarga se reconoce
-  // con Navigation Timing; si el navegador no lo informa, el botón Reiniciar queda disponible.
-  if (NAVIGATION === 'reload') {
-    try { sessionStorage.removeItem(KEY); } catch { /* almacenamiento restringido */ }
-  }
+  // sessionStorage conserva la sesión al navegar y recargar en esta pestaña.
+  // No es autenticación segura; se elimina al cerrar sesión, reiniciar o cerrar la pestaña.
   const read = () => {
     try { return JSON.parse(sessionStorage.getItem(KEY) || '{}'); }
     catch { return {}; }

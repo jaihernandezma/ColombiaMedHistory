@@ -9,7 +9,7 @@
 - `colombiamedhistory-presentacion/`: presentación académica, enlaces, ensayo, pitch y explicación de alcance.
 - GitHub Pages entrega los archivos estáticos públicamente. El JSON y el código JavaScript no son secretos ni una base de datos privada.
 
-No hay backend, envío de datos, almacenamiento remoto, autenticación robusta ni comunicación con entidades prestadoras. Los registros de usuario y la sesión de demostración se guardan únicamente en `sessionStorage` para conservarlos al navegar entre `index.html`, `auth/login.html` y `auth/registro.html` en la misma pestaña. `auth/session.js` usa Navigation Timing para borrar esos datos al detectar una recarga. El tipo de navegación no se expone uniformemente en todos los navegadores, de modo que el botón **Reiniciar demostración** permite borrarlos manualmente si la detección automática falla. Cerrar la pestaña también termina el almacenamiento de sesión del navegador.
+No hay backend, envío de datos, almacenamiento remoto, autenticación robusta ni comunicación con entidades prestadoras. La sesión y registros temporales se guardan únicamente en `sessionStorage` para conservarlos al navegar o recargar entre el inicio, autenticación y los paneles dentro de la pestaña actual. Cerrar sesión elimina la sesión activa; cerrar la pestaña termina su almacenamiento. Este comportamiento de navegador es solo continuidad de la demo: no protege los datos ni constituye autenticación. El botón **Reiniciar demostración** elimina todos los registros temporales.
 
 ## Perfiles y matriz de permisos
 
@@ -31,7 +31,7 @@ Elegir un rol no equivale a autenticar ni autorizar a una persona real. La inter
 
 La consulta rápida busca identificadores de demostración y enseña exclusivamente nombre ficticio, tipo y número sintético y ciudad de muestra. En un sistema real, una búsqueda pública por documento no debe revelar datos personales sin autenticación, autorización, finalidad y controles apropiados.
 
-El inicio ciudadano permite elegir una cuenta ficticia. Su panel presenta únicamente el registro sintético asociado a esa selección. Esta es una demostración de navegación, no un inicio de sesión seguro: la asociación se mantiene en JavaScript y el dataset completo es público.
+El inicio ciudadano permite elegir una cuenta ficticia y abre `panel/ciudadano.html`; el profesional abre `panel/profesional.html`. Cada página comprueba en JavaScript el rol y el ID de sesión, como control de navegación de una demo. La asociación se mantiene en el navegador y el dataset completo es público; esto no es inicio de sesión seguro ni protección de información clínica.
 
 ## Profesionales y autorización
 
@@ -39,7 +39,8 @@ Los únicos profesionales habilitados para la simulación se declaran en `data/p
 
 ## Archivos y datos temporales
 
-- Los pacientes registrados, perfiles profesionales nuevos y sesión de demostración se conservan durante la navegación entre las páginas de acceso mediante `sessionStorage`; se reinician al recargar cuando el navegador permite identificar la navegación como `reload`, o con **Reiniciar demostración**. Archivos, solicitudes, auditoría y preferencias viven en memoria de la página y no se comparten entre documentos.
+- Los perfiles de registro, sesión, solicitudes, preferencias y actividad simulada se conservan en `sessionStorage` durante la navegación/recarga en la pestaña; los archivos seleccionados por un ciudadano solo viven en memoria del documento abierto y se pierden al navegar o recargar. El JSON publicado no se altera.
+- Los perfiles profesionales nuevos quedan pendientes y no reciben una asignación automáticamente. Una integración real necesitaría verificar credenciales en fuentes institucionales, como ReTHUS cuando corresponda, y autorizar según contexto asistencial.
 - Los archivos personales aceptados son PDF, JPG, PNG o TXT de hasta 5 MB cada uno. Se conservan como objetos `File` y URL `Blob` locales; no se cargan a servidor, nube ni repositorio. Al eliminar, se revoca la URL temporal. Al recargar se pierden.
 - PDF e imágenes pueden abrirse para previsualización; TXT se descarga y no se inserta como HTML.
 - Los ejemplos clínicos oficiales son registros ficticios del historial y no son archivos personales borrables. Descargas TXT se generan en el navegador.

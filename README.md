@@ -4,10 +4,11 @@ Entrega académica de un prototipo web estático para explorar un historial clí
 
 ## Componentes de la entrega
 
-- **Aplicación clínica:** `index.html` — consulta rápida limitada, sesiones de ciudadano/profesional simuladas, perfiles asignados, registro temporal, historial, documentos y solicitudes de privacidad.
-- **Acceso y registro:** `auth/login.html` y `auth/registro.html` — accesos separados; `auth/session.js` coordina registros/sesiones temporales entre documentos de una pestaña.
+- **Inicio público:** `index.html` — consulta rápida limitada y acceso a los recorridos de demostración.
+- **Paneles independientes:** `panel/ciudadano.html` y `panel/profesional.html`, con estructura, estilos y lógica compartidos en `panel/panel.css` y `panel/panel.js`.
+- **Acceso y registro:** `auth/login.html` y `auth/registro.html` — el login direcciona según rol; `auth/session.js` coordina sesión y registros temporales entre documentos de una pestaña.
 - **Centro académico:** `colombiamedhistory-presentacion/index.html` — problema, seis flujos funcionales, alcance, referencias, ensayo, pitch, evaluación, equipo y enlaces.
-- **Datos de prueba:** `data/pacientes.json` — 20 perfiles clínicos completamente ficticios y dos profesionales de prueba con asignaciones explícitas.
+- **Datos de prueba:** `data/pacientes.json` — 20 perfiles clínicos y cuatro profesionales de prueba con asignaciones y alcances de permiso explícitos (incluye escenarios de un paciente y cero pacientes).
 - **Privacidad:** `CAMBIOS_PRIVACIDAD.md` — arquitectura, matriz de permisos, Habeas Data, documentos y limitaciones.
 - **Ensayo editable:** `docs/ensayo/BORRADOR_ENSAYO_COLOMBIAMEDHISTORY.md`.
 - **Guion pitch:** `docs/pitch/GUION_VIDEO_PITCH.md`.
@@ -16,7 +17,15 @@ Entrega académica de un prototipo web estático para explorar un historial clí
 
 ## Alcance y limitaciones
 
-HTML, CSS y JavaScript nativos, sin backend, servidor Node, base de datos, claves API ni dependencia de pago. Los registros se descargan desde JSON con `fetch`, por lo que debe abrirse desde un servidor HTTP o HTTPS; abrir `index.html` con `file://` no carga JSON de forma fiable. Las cuentas, roles, asignaciones y solicitudes son simulaciones frontend, no autenticación o autorización seguras. Registro y sesión usan `sessionStorage` para navegar entre las páginas en la misma pestaña; `auth/session.js` intenta reiniciarlos al detectar recarga y hay un botón **Reiniciar demostración** como control manual. No se usa `localStorage` ni se envían datos a un servidor. No ingresar información real ni usar la aplicación para atención, diagnóstico o decisiones de salud.
+HTML, CSS y JavaScript nativos, sin backend, servidor Node, base de datos, claves API ni dependencia de pago. Los registros se descargan desde JSON con `fetch`, por lo que debe abrirse desde un servidor HTTP o HTTPS; abrir `index.html` con `file://` no carga JSON de forma fiable. Las cuentas, roles, asignaciones y solicitudes son simulaciones frontend, no autenticación o autorización seguras: el JSON completo también se publica como contenido legible del sitio. La sesión, las cuentas temporales, preferencias y solicitudes usan `sessionStorage` para navegar y recargar dentro de la misma pestaña; el cierre de sesión elimina la sesión activa y cerrar la pestaña termina su almacenamiento. **sessionStorage no es un mecanismo de autenticación ni protege los datos.** Archivos agregados por el ciudadano viven solo en memoria mientras ese documento permanezca abierto; al navegar a otra página o recargar se pierden. No se usa `localStorage` ni se envían datos a un servidor. No ingresar información real ni usar la aplicación para atención, diagnóstico o decisiones de salud.
+
+### Recorridos de demostración
+
+- Ciudadano: `auth/login.html` → elegir Ciudadano y una cuenta → `panel/ciudadano.html`.
+- Profesional: elegir Profesional de salud → seleccionar perfil autorizado → `panel/profesional.html`.
+- Un perfil profesional recién registrado se conserva temporalmente como pendiente, no aparece como autorizado ni adquiere asignaciones clínicas.
+- Los paneles validan en el navegador el tipo de sesión y el identificador antes de cargar el perfil. Esto solo ordena la navegación demostrativa y no es una barrera de seguridad.
+- `data/pacientes.json` incluye asignaciones estables por profesional y permisos (`read_history`, `read_results`, `read_shared_documents`, `record_visit`). El panel no concede acceso a pacientes fuera de esas asignaciones.
 
 Los archivos de muestra se generan como TXT en el navegador para no publicar antiguos PDFs que aparentaban ser historias clínicas oficiales, contenían identificadores plausibles y afirmaban validez legal no comprobada.
 

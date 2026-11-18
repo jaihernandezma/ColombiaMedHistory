@@ -24,7 +24,7 @@
       approvedProfessionals = Array.isArray(data.profesionalesAutorizados) ? data.profesionalesAutorizados : [];
       dataLoaded = true;
       renderSamples();
-      restoreSession(persisted.authSession);
+      // La página raíz es el portal público; las sesiones solo se representan en /panel.
     } catch (error) {
       console.error('No fue posible cargar los datos de demostración:', error);
       setQueryState('error');
@@ -77,6 +77,9 @@
     if(canRecord)$('#clinical-entry-form').addEventListener('submit',event=>{event.preventDefault();const data=new FormData(event.currentTarget),file=data.get('attachment');if(file?.size>5*1024*1024){event.currentTarget.querySelector('.form-message').textContent='El adjunto supera el límite de 5 MB.';return;}if(file?.size&&!/\.(pdf|jpe?g|png|txt)$/i.test(file.name)){event.currentTarget.querySelector('.form-message').textContent='Formato no permitido.';return;}const id=`CARE-DEMO-${Date.now()}`,entry={id,date:data.get('date'),category:'Consulta',title:String(data.get('title')).trim(),detail:`${String(data.get('detail')).trim()} (registro ficticio agregado por profesional autorizado de demostración)`,institution:session.professional.institution,provider:session.professional.name};if(file?.size){entry.documentName=file.name;clinicalFiles.push({eventId:id,patientId:patient.id,name:file.name,url:URL.createObjectURL(file),type:file.type,size:file.size});}patient.events.push(entry);renderPatient(patient);showMessage('Atención ficticia agregada al historial de sesión; no se puede borrar desde la interfaz.',false);});
     buildTimeline(patient);
   }
+  const sampleMenu=$('#sample-menu'), sampleHome=sampleMenu?.parentElement;
+  function closeSamples(){if(!sampleMenu)return;sampleMenu.hidden=true;sampleMenu.classList.remove('sample-menu-floating');sampleHome?.append(sampleMenu);$('#sample-toggle').setAttribute('aria-expanded','false');}
+  function openSamples(){const toggle=$('#sample-toggle'),rect=toggle.getBoundingClientRect();document.body.append(sampleMenu);sampleMenu.classList.add('sample-menu-floating');sampleMenu.style.left=`${Math.max(12,Math.min(rect.left,innerWidth-370))}px`;sampleMenu.style.top=`${Math.min(rect.bottom+8,innerHeight-300)}px`;sampleMenu.style.width=`${Math.min(Math.max(rect.width,300),innerWidth-24)}px`;sampleMenu.hidden=false;toggle.setAttribute('aria-expanded','true');renderSamples($('#sample-filter').value);$('#sample-filter').focus();}
   function renderSamples(filter='') {
     const list=$('#sample-list'); if(!list)return;
     const documentType=$('#doc-type'), selectedType=documentType.value;
@@ -86,7 +89,7 @@
     const term=filter.trim().toLocaleLowerCase('es');
     const matching=allPatients().filter(p=>`${fullName(p)} ${p.numeroDocumento}`.toLocaleLowerCase('es').includes(term));
     list.innerHTML=matching.length?matching.map(p=>`<li><div class="sample-entry"><button type="button" data-sample="${escapeHTML(p.numeroDocumento)}" data-type="${escapeHTML(p.tipoDocumento)}"><b>${escapeHTML(fullName(p))}</b><span>${escapeHTML(p.tipoDocumento)} ${escapeHTML(p.numeroDocumento)}</span></button><button type="button" data-copy="${escapeHTML(p.numeroDocumento)}" aria-label="Copiar documento de ${escapeHTML(fullName(p))}">Copiar ID</button></div></li>`).join(''):'<li class="help">No hay coincidencias.</li>';
-    $$('[data-sample]',list).forEach(button=>button.addEventListener('click',()=>{input.value=button.dataset.sample;documentType.value=button.dataset.type;$('#sample-menu').hidden=true;$('#sample-toggle').setAttribute('aria-expanded','false');input.focus();}));
+    $$('[data-sample]',list).forEach(button=>button.addEventListener('click',()=>{input.value=button.dataset.sample;documentType.value=button.dataset.type;closeSamples();input.focus();}));
     $$('[data-copy]',list).forEach(copy=>{const perform=async e=>{e.stopPropagation();try{await navigator.clipboard.writeText(copy.dataset.copy);$('#copy-message').textContent='Documento copiado.';}catch{$('#copy-message').textContent=`ID: ${copy.dataset.copy}`;}};copy.addEventListener('click',perform);copy.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();perform(e);}});});
   }
   function showAccount(tab='resumen') {
@@ -166,10 +169,10 @@
   }
   form.addEventListener('submit',event=>{event.preventDefault();const requestId=++querySequence;if(!dataLoaded){setQueryState('error');showMessage('Los perfiles de prueba todavía se están cargando. Intenta de nuevo en un momento.');return;}const raw=input.value.trim();if(!raw){setQueryState('error');showMessage('Escribe o selecciona un identificador ficticio.');input.focus();return;}setQueryState('loading');const patient=allPatients().find(item=>item.tipoDocumento===document.querySelector('#doc-type').value&&item.numeroDocumento.toLowerCase()===raw.toLowerCase());if(requestId!==querySequence)return;if(!patient){setQueryState('error');showMessage('Paciente no encontrado. Verifica el identificador o elige un paciente de prueba.');input.focus();return;}renderPatient(patient,{clinical:false});setQueryState('success');});
   $('#fill-demo').addEventListener('click',()=>{input.value=patients[0]?.numeroDocumento||'900000000001';if(patients[0])$('#doc-type').value=patients[0].tipoDocumento;input.focus();});
-  $('#sample-toggle').addEventListener('click',()=>{const menu=$('#sample-menu');menu.hidden=!menu.hidden;$('#sample-toggle').setAttribute('aria-expanded',String(!menu.hidden));if(!menu.hidden){renderSamples($('#sample-filter').value);$('#sample-filter').focus();}});
+  $('#sample-toggle').addEventListener('click',()=>sampleMenu.hidden?openSamples():closeSamples());
   $('#sample-filter').addEventListener('input',e=>renderSamples(e.target.value));
-  document.addEventListener('click',event=>{const picker=$('.sample-picker');if(!picker.contains(event.target)){$('#sample-menu').hidden=true;$('#sample-toggle').setAttribute('aria-expanded','false');}});
-  document.addEventListener('keydown',event=>{if(event.key==='Escape'){$('#sample-menu').hidden=true;$('#sample-toggle').setAttribute('aria-expanded','false');}});
+  document.addEventListener('click',event=>{if(event.target.closest('#sample-toggle'))return;if(!$('.sample-picker').contains(event.target)&&!sampleMenu.contains(event.target))closeSamples();});
+  document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!sampleMenu.hidden){closeSamples();$('#sample-toggle').focus();}});
   $('#reset-demo-main')?.addEventListener('click',()=>{if(window.confirm('¿Borrar perfiles temporales y cerrar la sesión de demostración?')){window.CMHSession?.reset();location.href='index.html';}});
   // Una sola escucha delegada y actualizaciones agrupadas por frame; no se activa en tacto.
   if(matchMedia('(hover: hover) and (pointer: fine)').matches&&!matchMedia('(prefers-reduced-motion: reduce)').matches){let frame=0,x=0,y=0,target=null;document.addEventListener('pointermove',event=>{x=event.clientX;y=event.clientY;target=event.target.closest('.panel,.how-grid article,.account-panel');if(target){const rect=target.getBoundingClientRect();target.style.setProperty('--local-x',`${x-rect.left}px`);target.style.setProperty('--local-y',`${y-rect.top}px`);}if(!frame)frame=requestAnimationFrame(()=>{document.documentElement.style.setProperty('--pointer-x',`${x}px`);document.documentElement.style.setProperty('--pointer-y',`${y}px`);frame=0;});},{passive:true});}
