@@ -33,6 +33,8 @@
     if (url) {
       const link = document.createElement('a'); link.href = url.href;
       link.textContent = 'Portafolio de ' + person.name.split(' ')[0] + ' ↗'; card.append(link);
+    } else {
+      const status = document.createElement('small'); status.textContent = 'Portafolio pendiente de enlace'; card.append(status);
     }
     document.querySelector('#integrantes').append(card);
   }
