@@ -1,6 +1,6 @@
 # ColombiaMedHistory
 
-Entrega académica de un prototipo web estático para explorar un historial clínico **enteramente ficticio** desde una sola interfaz. El problema priorizado es localizar y organizar antecedentes, diagnósticos, tratamientos, consultas y resultados que pueden estar distribuidos. No se implementa una red de interoperabilidad nacional.
+Entrega académica de un prototipo web estático para explorar un historial clínico **ficticio** desde una sola interfaz. El problema atacado es localizar y organizar antecedentes, diagnósticos, tratamientos, consultas y resultados que pueden estar distribuidos distintos medios.
 
 ## Componentes de la entrega
 
