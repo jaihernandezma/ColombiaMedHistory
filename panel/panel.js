@@ -21,7 +21,7 @@
   }
   const heading=(title,sub='')=>`<div class="page-heading"><div><span class="eyebrow">${kind==='citizen'?'PORTAL CIUDADANO':'CONSULTA PROFESIONAL'} · DEMOSTRACIÓN</span><h1>${title}</h1>${sub?`<p class="muted">${sub}</p>`:''}</div></div>`;
   function setActive(){ $$('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.section===active)); }
-  function render(section){active=section;setActive();const main=$('#main');if(kind==='citizen')renderCitizen(section,main);else renderDoctor(section,main);main.focus({preventScroll:true});}
+  function render(section){active=section;setActive();const main=$('#main');if(kind==='citizen')renderCitizen(section,main);else renderDoctor(section,main);main.focus({preventScroll:true});window.scrollTo(0,0);}
   function stat(label,value){return `<article class="stat"><span>${label}</span><strong>${value}</strong></article>`;}
   function records(p){return [...(p.events||[]),...(state.addedVisits||[]).filter(e=>e.patientId===p.id).map(e=>({...e,category:'Consulta',institution:e.institution||me?.institution,provider:e.provider||me?.name}))].sort((a,b)=>b.date.localeCompare(a.date));}
   function timeline(p,list=records(p)){return list.length?`<div class="timeline">${list.map(e=>`<button class="record" data-event-title="${esc(e.title)}" data-event-date="${esc(e.date)}" data-source="${p.id}" aria-label="Ver detalle de ${esc(e.title)}"><time>${date(e.date)}<br>${esc(e.category||'Atención')}</time><span><h3>${esc(e.title)}</h3><p>${esc(e.institution||'Institución ficticia')} · ${esc(e.provider||'Profesional ficticio')}</p><p>${esc(e.detail||'')}</p></span></button>`).join('')}</div>`:'<div class="empty">No hay eventos clínicos en este perfil de demostración.</div>';}

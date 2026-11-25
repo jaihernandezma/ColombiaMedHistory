@@ -7,13 +7,13 @@ Entrega académica de un prototipo web estático para explorar un historial clí
 - **Inicio público:** `index.html` — consulta rápida limitada y acceso a los recorridos de demostración.
 - **Paneles independientes:** `panel/ciudadano.html` y `panel/profesional.html`, con estructura, estilos y lógica compartidos en `panel/panel.css` y `panel/panel.js`.
 - **Acceso y registro:** `auth/login.html` y `auth/registro.html` — el login direcciona según rol; `auth/session.js` coordina sesión y registros temporales entre documentos de una pestaña.
-- **Centro académico:** `colombiamedhistory-presentacion/index.html` — problema, seis flujos funcionales, alcance, referencias, ensayo, pitch, evaluación, equipo y enlaces.
+- **Centro académico:** `colombiamedhistory-presentacion/index.html` — caso de Perfil Azul en tres pasos, capturas, ensayo, materiales de sustentación y equipo.
 - **Datos de prueba:** `data/pacientes.json` — 20 perfiles clínicos y cuatro profesionales de prueba con asignaciones y alcances de permiso explícitos (incluye escenarios de un paciente y cero pacientes).
 - **Privacidad:** `CAMBIOS_PRIVACIDAD.md` — arquitectura, matriz de permisos, Habeas Data, documentos y limitaciones.
-- **Ensayo editable:** `docs/ensayo/BORRADOR_ENSAYO_COLOMBIAMEDHISTORY.md`.
-- **Guion pitch:** `docs/pitch/GUION_VIDEO_PITCH.md`.
-- **Arquitectura y validación:** `docs/ARQUITECTURA.md`, `docs/PROTOCOLO_USABILIDAD.md`.
-- **Estado de entrega:** `ESTADO_ENTREGA.md`.
+- **Ensayo editable:** `../../02 Ensayo/Ensayo final.docx`; versión web en `colombiamedhistory-presentacion/materiales/ensayo.pdf`.
+- **Guiones y diapositivas:** `../../04 Pitch y Video/Pitch.docx`, `../../04 Pitch y Video/Exposición.docx` y `../../04 Pitch y Video/Sustentación.pptx`.
+- **Publicación:** `../../05 Página web/LEEME.md` y paquete de distribución `../../05 Página web/ColombiaMedHistory-web.zip`.
+- **Índice, rúbrica y estado de entrega:** `../../ENTREGA.md`.
 
 ## Alcance y limitaciones
 
@@ -27,7 +27,7 @@ HTML, CSS y JavaScript nativos, sin backend, servidor Node, base de datos, clave
 - Los paneles validan en el navegador el tipo de sesión y el identificador antes de cargar el perfil. Esto solo ordena la navegación demostrativa y no es una barrera de seguridad.
 - `data/pacientes.json` incluye asignaciones estables por profesional y permisos (`read_history`, `read_results`, `read_shared_documents`, `record_visit`). El panel no concede acceso a pacientes fuera de esas asignaciones.
 
-Los archivos de muestra se generan como TXT en el navegador para no publicar antiguos PDFs que aparentaban ser historias clínicas oficiales, contenían identificadores plausibles y afirmaban validez legal no comprobada.
+Los resúmenes de muestra se generan como TXT en el navegador. Los PDF antiguos y la carpeta `copia/` siguen en el directorio de trabajo; el paquete publicable los excluye mediante una lista explícita de archivos.
 
 ## Ejecutar localmente
 
