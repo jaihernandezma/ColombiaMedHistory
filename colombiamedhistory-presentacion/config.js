@@ -2,7 +2,6 @@
 window.CMH_CONFIG = {
   demoUrl: '../index.html',
   essayPdfUrl: './materiales/ensayo.pdf',
-  youtubeUrl: '',
   team: [
     {name:'Sara Hincapié Amaya', portfolioUrl:'https://sites.google.com/pascualbravo.edu.co/sarahincapie-perfilprofesional/blog', role:'Investigación y ensayo'},
     {name:'Jaider Esteban Hernández Martínez', portfolioUrl:'https://sites.google.com/pascualbravo.edu.co/esteban-web-development/inicio', role:'Prototipo y web'},

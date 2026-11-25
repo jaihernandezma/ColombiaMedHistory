@@ -11,20 +11,20 @@
       return url.protocol === 'https:' && !url.username && !url.password ? url : null;
     } catch { return null; }
   }
-  const video = httpsUrl(config.youtubeUrl);
-  if (video) {
-    const host = video.hostname;
-    const id = host === 'youtu.be' ? video.pathname.slice(1)
-      : ['youtube.com','www.youtube.com','m.youtube.com'].includes(host)
-        ? video.pathname === '/watch' ? video.searchParams.get('v') : video.pathname.match(/^\/(?:embed|shorts)\/([^/]+)$/)?.[1]
-        : null;
-    if (/^[\w-]{11}$/.test(id || '')) {
-      const frame = document.createElement('iframe');
-      frame.src = 'https://www.youtube-nocookie.com/embed/' + id;
-      frame.title = 'Video pitch de ColombiaMedHistory'; frame.allowFullscreen = true;
-      frame.loading = 'lazy'; frame.referrerPolicy = 'strict-origin-when-cross-origin';
-      document.querySelector('#video-slot').replaceChildren(frame);
-    }
+  const slides = document.querySelector('#diapositivas');
+  const expand = document.querySelector('#ampliar');
+  if (document.fullscreenEnabled && slides.requestFullscreen) {
+    expand.hidden = false;
+    expand.addEventListener('click', async () => {
+      const status = document.querySelector('#aviso-presentacion');
+      status.textContent = '';
+      try {
+        await slides.requestFullscreen();
+        slides.focus();
+      } catch {
+        status.textContent = 'No se pudo activar la pantalla completa. Puedes abrir la presentación en OneDrive.';
+      }
+    });
   }
   for (const person of config.team || []) {
     const card = document.createElement('article'), name = document.createElement('h3'), role = document.createElement('p');
