@@ -5,7 +5,7 @@
   const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
   const state = () => window.CMHSession.read();
   const save = changes => window.CMHSession.update(changes);
-  const baseUrl = '../data/pacientes.json';
+  const baseUrl = '../data/pacientes.json?v=roles-2';
   let demoData = { pacientes: [], profesionalesAutorizados: [] }, loginRole = 'citizen', registerRole = 'citizen', dataReady = false;
 
   async function loadData() {
@@ -30,7 +30,7 @@
     if (!select) return;
     const saved = state();
     if (loginRole === 'citizen') {
-      const options = [...demoData.pacientes, ...temporaryPatients()].map(patient => `<option value="${escapeHTML(patient.id)}">${escapeHTML(patient.nombres)} ${escapeHTML(patient.apellidos)} · ${escapeHTML(patient.tipoDocumento)} ${escapeHTML(patient.numeroDocumento)}${patient.id.startsWith('P-TEMP-') ? ' · temporal' : ''}</option>`).join('');
+      const options = [...demoData.pacientes, ...temporaryPatients()].map(patient => `<option value="${escapeHTML(patient.id)}">${escapeHTML(patient.nombres)} ${escapeHTML(patient.apellidos)} · Paciente · ${escapeHTML(patient.tipoDocumento)} ${escapeHTML(patient.numeroDocumento)}${patient.id.startsWith('P-TEMP-') ? ' · temporal' : ''}</option>`).join('');
       select.innerHTML = options || '<option value="">No hay cuentas de ciudadano disponibles</option>';
       select.disabled = !options;
       $('#account-help').textContent = 'La sesión solo permitirá acceder al perfil ficticio seleccionado.';
@@ -38,9 +38,9 @@
       const previous = saved.authSession?.kind === 'citizen' ? saved.authSession.patientId : '';
       if (previous && select.querySelector(`option[value="${CSS.escape(previous)}"]`)) select.value = previous;
     } else {
-      const approved = demoData.profesionalesAutorizados || [];
+      const approved = (demoData.profesionalesAutorizados || []).filter(prof => prof.assignments?.some(a => a.status === 'active'));
       const pending = temporaryProfessionals();
-      select.innerHTML = `<optgroup label="Profesionales de demostración autorizados">${approved.map(prof => `<option value="${escapeHTML(prof.id)}">${escapeHTML(prof.name)} · ${escapeHTML(prof.institution)}</option>`).join('')}</optgroup>${pending.length ? `<optgroup label="Pendientes — sin acceso clínico">${pending.map((prof,index) => `<option value="pending-${index}" disabled>${escapeHTML(prof.nombre)} · PENDIENTE DE VERIFICACIÓN</option>`).join('')}</optgroup>` : ''}`;
+      select.innerHTML = `<optgroup label="Profesionales de demostración autorizados">${approved.map(prof => `<option value="${escapeHTML(prof.id)}">${escapeHTML(prof.name)} · Médico · ${escapeHTML(prof.institution)}</option>`).join('')}</optgroup>${pending.length ? `<optgroup label="Pendientes — sin acceso clínico">${pending.map((prof,index) => `<option value="pending-${index}" disabled>${escapeHTML(prof.nombre)} · PENDIENTE DE VERIFICACIÓN</option>`).join('')}</optgroup>` : ''}`;
       select.disabled = approved.length === 0;
       $('#account-help').textContent = 'Los perfiles recién registrados no se pueden utilizar para consultar historiales: requieren verificación y no tienen permisos.';
       $('#login-submit').disabled = approved.length === 0;
@@ -115,7 +115,6 @@
   });
   $$('[data-register-role]').forEach(button=>button.addEventListener('click',()=>{registerRole=button.dataset.registerRole;$$('[data-register-role]').forEach(item=>{const active=item===button;item.classList.toggle('selected',active);item.setAttribute('aria-pressed',String(active));});$('#registration-confirmation').hidden=true;$('#registration-form-container').hidden=false;renderRegistration();}));
   $$('.reset-demo').forEach(button=>button.addEventListener('click',resetDemo));
-  if(matchMedia('(hover: hover) and (pointer: fine)').matches&&!matchMedia('(prefers-reduced-motion: reduce)').matches){let frame=0,x=0,y=0;document.addEventListener('pointermove',event=>{x=event.clientX;y=event.clientY;if(!frame)frame=requestAnimationFrame(()=>{document.documentElement.style.setProperty('--px',`${x}px`);document.documentElement.style.setProperty('--py',`${y}px`);document.body.classList.add('lighting');frame=0;});},{passive:true});document.addEventListener('pointerleave',()=>document.body.classList.remove('lighting'));}
   if(document.body.dataset.page==='register'){
     $$('[data-register-role]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.registerRole==='citizen')));
     renderRegistration();

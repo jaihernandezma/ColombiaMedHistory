@@ -8,11 +8,14 @@
   <title>Registro | ColombiaMedHistory</title>
   <link rel="stylesheet" href="auth.css">
   <script src="session.js" defer></script>
-  <script src="auth.js" defer></script>
-</head>
+  <script src="auth.js?v=roles-2" defer></script>
+<meta name="robots" content="noindex, nofollow">
+  <meta property="og:type" content="website"><meta property="og:title" content="Registro | ColombiaMedHistory">
+  <meta property="og:description" content="Encuentra el examen de la cita en un historial clínico ficticio. Proyecto académico ColombiaMedHistory."><meta property="og:image" content="../assets/portada.png"><meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../assets/logo.svg"><link rel="stylesheet" href="../css/identidad.css"></head>
 <body data-page="register">
   <header class="auth-topbar">
-    <a class="brand" href="../index.html"><span class="brand-mark" aria-hidden="true">✚</span><span>ColombiaMed<strong>History</strong></span></a>
+    <a class="brand" href="../index.html"><img src="../assets/logo.svg" width="32" height="32" alt=""><span>ColombiaMed<strong>History</strong></span></a>
     <a class="button quiet" href="../index.html">← Volver al inicio</a>
   </header>
   <main class="auth-shell">
@@ -21,8 +24,8 @@
       <h1 id="page-title">Crear perfil de demostración</h1>
       <p class="muted">¿Qué tipo de cuenta deseas registrar?</p>
       <div class="role-select" role="group" aria-label="Tipo de perfil a registrar">
-        <button type="button" class="role-option selected" data-register-role="citizen" aria-pressed="true">Ciudadano</button>
-        <button type="button" class="role-option" data-register-role="professional" aria-pressed="false">Profesional de salud</button>
+        <button type="button" class="role-option selected" data-register-role="citizen" aria-pressed="true">Paciente</button>
+        <button type="button" class="role-option" data-register-role="professional" aria-pressed="false">Médico</button>
       </div>
       <div id="registration-form-container"></div>
       <div id="registration-confirmation" class="confirmation" role="status" aria-live="polite" hidden></div>

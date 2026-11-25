@@ -1,0 +1,42 @@
+name: Publicar prototipo
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+        id: pages
+      - name: Preparar sitio y enlaces públicos
+        env:
+          SITE_URL: ${{ steps.pages.outputs.base_url }}
+        run: |
+          mkdir _site
+          cp -r index.html 404.html assets auth colombiamedhistory-presentacion css data js panel _site/
+          python3 - <<'PY'
+          import html, os, pathlib, re
+          base = html.escape(os.environ['SITE_URL'].rstrip('/'), quote=True)
+          for path in pathlib.Path('_site').rglob('*.html'):
+              page = path.read_text()
+              page = re.sub(r'(property="og:image" content=")(?:\.\./)?assets/', rf'\g<1>{base}/assets/', page)
+              if path.name == '404.html':
+                  page = page.replace('<head>', f'<head><base href="{base}/">')
+              path.write_text(page)
+          PY
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - uses: actions/deploy-pages@v4
+        id: deploy
