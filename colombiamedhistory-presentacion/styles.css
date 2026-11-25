@@ -1,4 +1,4 @@
-:root{color-scheme:dark;--bg:#07111f;--surface:#101A2E;--surface2:#0b1220;--line:rgba(132,164,198,.14);--text:#e8f2fc;--muted:#8293aa;--blue:#00BFFF;--cyan:#00E5FF;--mono:'DM Mono',monospace;--sans:system-ui,sans-serif;--display:system-ui,sans-serif}
+:root{color-scheme:dark;--bg:#05070D;--surface:#101A2E;--surface2:#0b1220;--line:rgba(132,164,198,.14);--text:#e8f2fc;--muted:#8293aa;--blue:#00BFFF;--cyan:#00E5FF;--mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;--display:'Space Grotesk',sans-serif}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:90px}
 body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.65;overflow-x:hidden}
@@ -41,3 +41,13 @@ to{opacity:1;transform:translateY(0)}}
 @media(max-width:430px){.wrap{width:calc(100% - 32px)}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 button:focus-visible,a:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+
+body:before{position:fixed;inset:0;z-index:-1;content:"";pointer-events:none;background-image:linear-gradient(rgba(103,145,186,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(103,145,186,.035) 1px,transparent 1px);background-size:64px 64px;mask-image:linear-gradient(to bottom,#000 0%,transparent 75%)}
+@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
+  body::after {content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:0;transition:opacity .35s ease;background:radial-gradient(440px circle at var(--px,50%) var(--py,30%),rgba(0,191,255,.09),transparent 72%)}
+  body.lighting::after {opacity:1}
+  :is(.tarjeta-muestra,.rejilla article,.columnas article) {position:relative;isolation:isolate;transition:border-color .25s,box-shadow .25s}
+  :is(.tarjeta-muestra,.rejilla article,.columnas article):hover {border-color:#268296;box-shadow:0 0 23px #00bfff14}
+  :is(.tarjeta-muestra,.rejilla article,.columnas article)::before {content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;border-radius:inherit;opacity:0;transition:opacity .3s;background:radial-gradient(350px circle at var(--local-x,50%) var(--local-y,50%),rgba(0,191,255,.13),transparent 72%)}
+  :is(.tarjeta-muestra,.rejilla article,.columnas article):hover::before {opacity:1}
+}

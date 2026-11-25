@@ -1,11 +1,8 @@
-body { background: #07111f; color: #edf6ff; font-family: system-ui, sans-serif; }
 .brand { display: inline-flex; align-items: center; gap: .45rem; white-space: nowrap; }
 .brand strong { color: #36d5ed; }
-.topbar, .site-header, .auth-topbar { background: #07111f; }
 table { width: 100%; border-collapse: collapse; margin-block: 1rem; }
 th, td { padding: .55em; text-align: left; border-bottom: 1px solid #314557; }
 caption { text-align: left; font-weight: bold; }
 
-.primary, .button-primary, .header-actions .nav-register {background:#78dbe8;color:#07111f;box-shadow:none}
-.panel, .quick-info-card, .quick-result-head, .auth-card {background:#0d1b2d}
 button:disabled{cursor:not-allowed;opacity:.65}
+body:not(:has(.brand)) { background:#07111f; color:#edf6ff; font-family:system-ui,sans-serif; }

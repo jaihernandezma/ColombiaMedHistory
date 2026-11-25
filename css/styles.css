@@ -1,4 +1,4 @@
-:root{color-scheme:dark;--bg:#07111f;--panel:#0d1b2d;--panel2:#101f32;--line:#21364b;--text:#edf6ff;--muted:#9baec1;--cyan:#36d5ed;--blue:#5b9dff;--green:#65d6b3;--warn:#ffd27a;--sans:system-ui,sans-serif;--display:system-ui,sans-serif}
+:root{color-scheme:dark;--bg:#07111f;--panel:#0d1b2d;--panel2:#101f32;--line:#21364b;--text:#edf6ff;--muted:#9baec1;--cyan:#36d5ed;--blue:#5b9dff;--green:#65d6b3;--warn:#ffd27a;--sans:'DM Sans',Arial,sans-serif;--display:'Space Grotesk',sans-serif}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:85px}
 body{margin:0;min-width:320px;background:radial-gradient(ellipse at 73% 0%,#112849 0,transparent 36%),var(--bg);color:var(--text);font:15px/1.6 var(--sans)}
@@ -147,4 +147,14 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
  .topbar .brand {grid-area:1/1;font-size:15px}.topbar .demo-pill {grid-area:1/2;font-size:9px;justify-self:end}.demo-pill i{display:none}
  .topbar nav {grid-area:2/1;justify-content:start;gap:8px;font-size:11px;align-items:center}.header-actions{grid-area:2/2}.header-actions a{font-size:11px;padding:0 6px}
  .result-panel {scroll-margin-top:12px}
+}
+
+/* Luz de las tarjetas de la portada, bajo el texto y los controles. */
+@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
+  .panel::before, .how-grid article::before {
+    content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
+    opacity:0; transition:opacity .35s ease;
+    background:radial-gradient(380px circle at var(--local-x,50%) var(--local-y,50%),rgba(26,173,255,.12),transparent 72%);
+  }
+  .panel:hover::before, .how-grid article:hover::before {opacity:1}
 }
